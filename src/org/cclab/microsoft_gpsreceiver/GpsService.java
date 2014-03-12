@@ -14,9 +14,11 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 public class GpsService extends Service {
@@ -52,17 +54,22 @@ public class GpsService extends Service {
 				}
 			}
 		};
-		locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		locationManager.addNmeaListener(nmeaListener);
+		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 		
 		dataset = new ArrayList<GpsData>();
 		
 		
 		// request location updates 
-		long timeInterval = 5 * 1000;
+		final long timeInterval = 3 * 1000;
 		// TODO how about minDistance 1~2m? 
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, timeInterval, 0, locationListener);
+		try {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, timeInterval, 0, locationListener);
+		} 
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		locationManager.addNmeaListener(nmeaListener);
 		
 		// success message
 		Toast.makeText(this,  getResources().getString(R.string.service_start), Toast.LENGTH_LONG).show();
@@ -85,8 +92,14 @@ public class GpsService extends Service {
 		// save data to file
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(System.currentTimeMillis());
-		File file = new File(directory + "/" + cal.get(Calendar.YEAR) + "_" + (cal.get(Calendar.MONTH) + 1) + "_" + cal.get(Calendar.DATE) + "_" + 
-				cal.get(Calendar.HOUR_OF_DAY) +	"_" + cal.get(Calendar.MINUTE) + "_" + cal.get(Calendar.SECOND) + ".txt");
+		File file = new File(directory + "/" + 
+				"" + "_" + // user id 
+				cal.get(Calendar.YEAR) + 
+				Utility.getTwoDigitNumber(cal.get(Calendar.MONTH) + 1) +  
+				Utility.getTwoDigitNumber(cal.get(Calendar.DATE)) + "_" + 
+				Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
+				Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + ":" + 
+				Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt");
 		
 		FileWriter fw = null;
 		BufferedWriter bw = null;
@@ -96,6 +109,8 @@ public class GpsService extends Service {
 			fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 			
+			Log.i("MicrosoftProject", "DatasetSize: " + dataset.size());
+			Toast.makeText(getApplicationContext(), "DatasetSize: " + dataset.size(), Toast.LENGTH_SHORT).show();
 			for(int i = 0; i < dataset.size(); i++) {
 				bw.write(dataset.get(i).toString());
 			}
@@ -131,27 +146,30 @@ public class GpsService extends Service {
 		
 		@Override
 		public void onLocationChanged(Location location) {
-			
 			GpsData data = new GpsData(location.getLatitude(), location.getLongitude(), location.getTime(), nSatellite, hdop);
 			dataset.add(data);
 		}
 
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-			
+			switch(status) {
+			case LocationProvider.AVAILABLE:
+				break;
+			case LocationProvider.OUT_OF_SERVICE:
+				break;
+			case LocationProvider.TEMPORARILY_UNAVAILABLE:
+				break;
+			}
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-			
+			// 
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-			
+			//
 		}
 
 	}
