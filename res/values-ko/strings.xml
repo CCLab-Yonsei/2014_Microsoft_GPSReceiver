@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CCLab GPS</string>
+    <string name="service_start">GPS 기록이 정상적으로 시작되었습니다.</string>
+    <string name="service_stop">GPS 기록이 정상적으로 종료되었습니다.</string>
+    <string name="service_error">무언가 잘못되었습니다!</string>
+    <string name="button_logging_start">기록 시작하기</string>
+    <string name="button_logging_stop">기록 멈추기</string>
+    <string name="text_loggingstatus_on">현재 GPS 기록 중입니다.</string>
+    <string name="text_loggingstatus_off">현재 GPS 기록 중이 아닙니다.</string>
+
+</resources>

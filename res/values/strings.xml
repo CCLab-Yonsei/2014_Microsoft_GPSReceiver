@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Microsoft_GPSReceiver</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">CCLab GPS</string>
+    <string name="service_start">GPS logging is successfully started.</string>
+    <string name="service_stop">GPS logging is successfully finished.</string>
+    <string name="button_logging_start">Start logging</string>
+    <string name="button_logging_stop">Stop logging</string>
+    <string name="text_loggingstatus_on">Now logging</string>
+    <string name="text_loggingstatus_off">NOT logging</string>
 
 </resources>

@@ -1,8 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.cclab.microsoft_gpsreceiver.MainActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:context="org.cclab.microsoft_gpsreceiver.MainActivity">
+    
+    <ToggleButton
+        android:id="@+id/togglebutton_startstop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textOn="@string/button_logging_stop"
+        android:textOff="@string/button_logging_start"
+        android:onClick="onLogging" />
 
+    <TextView
+        android:id="@+id/text_loggingstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/togglebutton_startstop"
+        android:layout_centerHorizontal="true"
+        android:text="@string/text_loggingstatus_off" />
+
+</RelativeLayout>
