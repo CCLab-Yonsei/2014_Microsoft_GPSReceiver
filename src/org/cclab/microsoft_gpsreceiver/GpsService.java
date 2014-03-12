@@ -35,7 +35,7 @@ public class GpsService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+
 		// initialize member variables
 		nmeaListener = new GpsStatus.NmeaListener() {
 			
@@ -43,7 +43,6 @@ public class GpsService extends Service {
 			public void onNmeaReceived(long timestamp, String nmea) {
 				String[] element = nmea.split(",");
 				try {
-					// TODO Re-check condition
 					if(element[0].equals("$GPGGA") && Integer.parseInt(element[6]) != 0) {
 						hdop = Double.parseDouble(element[8]);
 						nSatellite = Integer.parseInt(element[7]);
@@ -140,6 +139,11 @@ public class GpsService extends Service {
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		return START_STICKY;
 	}
 	
 	private class MyLocationListener implements LocationListener {

@@ -8,5 +8,8 @@
     <string name="button_logging_stop">Stop logging</string>
     <string name="text_loggingstatus_on">Now logging</string>
     <string name="text_loggingstatus_off">NOT logging</string>
+    <string name="alert_enable_gps_question">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="alert_enable_gps_yes">Yes</string>
+    <string name="alert_enable_gps_no">No</string>
 
 </resources>

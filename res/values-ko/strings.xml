@@ -9,5 +9,8 @@
     <string name="button_logging_stop">기록 멈추기</string>
     <string name="text_loggingstatus_on">현재 GPS 기록 중입니다.</string>
     <string name="text_loggingstatus_off">현재 GPS 기록 중이 아닙니다.</string>
+    <string name="alert_enable_gps_question">GPS가 꺼져 있습니다. 위치 기록을 위해 설정에서 GPS를 켜야 합니다.</string>
+    <string name="alert_enable_gps_yes">설정 화면으로 가기</string>
+    <string name="alert_enable_gps_no">닫기</string>
 
 </resources>
