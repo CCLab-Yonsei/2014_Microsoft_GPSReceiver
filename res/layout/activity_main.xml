@@ -4,23 +4,62 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context="org.cclab.microsoft_gpsreceiver.MainActivity" >
-    
-    <ToggleButton
-        android:id="@+id/togglebutton_startstop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textOn="@string/button_logging_stop"
-        android:textOff="@string/button_logging_start"
-        android:onClick="onLogging" />
 
-    <TextView
-        android:id="@+id/text_loggingstatus"
+    <FrameLayout
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignParentTop="true" >
+	    
+        <ImageView
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:adjustViewBounds="true"
+	        android:clickable="false"
+	        android:focusable="false"
+	        android:focusableInTouchMode="false"
+	        android:longClickable="false"
+	        android:scaleType="centerCrop"
+	        android:src="@drawable/sky"
+	        android:contentDescription="@string/main_contentsdescription_mainimage" />
+        
+	    <TextView
+	        android:id="@+id/text_maintext"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="150dp"
+	        android:gravity="center_horizontal"
+	        android:text="@string/main_text_thanks"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="#FFFFFF"
+	        android:textSize="20sp"
+	        android:fontFamily="sans-serif-light" />
+            
+    </FrameLayout>
+    
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/togglebutton_startstop"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/text_loggingstatus_off" />
+        android:layout_marginBottom="50dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+    
+	    <ToggleButton
+	        android:id="@+id/togglebutton_startstop"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onLogging"
+	        android:textOff="@string/main_button_logging_start"
+	        android:textOn="@string/main_button_logging_stop" />
+	
+	    <TextView
+	        android:id="@+id/text_gpsstatus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="15dp"
+	        android:text="@string/main_text_loggingstatus_off" />
+	    
+    </LinearLayout>
 
 </RelativeLayout>

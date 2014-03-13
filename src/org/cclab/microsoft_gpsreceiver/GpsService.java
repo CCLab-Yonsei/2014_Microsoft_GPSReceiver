@@ -60,7 +60,7 @@ public class GpsService extends Service {
 		
 		
 		// request location updates 
-		final long timeInterval = 3 * 1000;
+		final long timeInterval = 5 * 1000;
 		// TODO how about minDistance 1~2m? 
 		try {
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, timeInterval, 0, locationListener);
@@ -88,38 +88,40 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
-		// save data to file
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(System.currentTimeMillis());
-		File file = new File(directory + "/" + 
-				"" + "_" + // user id 
-				cal.get(Calendar.YEAR) + 
-				Utility.getTwoDigitNumber(cal.get(Calendar.MONTH) + 1) +  
-				Utility.getTwoDigitNumber(cal.get(Calendar.DATE)) + "_" + 
-				Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
-				Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + ":" + 
-				Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt");
-		
-		FileWriter fw = null;
-		BufferedWriter bw = null;
-		
-		try {
-			file.createNewFile();
-			fw = new FileWriter(file);
-			bw = new BufferedWriter(fw);
+		if(dataset.size() > 0) { 
+			// save data to file
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(System.currentTimeMillis());
+			File file = new File(directory + "/" + 
+					"" + "_" + // user id 
+					cal.get(Calendar.YEAR) + 
+					Utility.getTwoDigitNumber(cal.get(Calendar.MONTH) + 1) +  
+					Utility.getTwoDigitNumber(cal.get(Calendar.DATE)) + "_" + 
+					Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
+					Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + ":" + 
+					Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt");
 			
-			Log.i("MicrosoftProject", "DatasetSize: " + dataset.size());
-			Toast.makeText(getApplicationContext(), "DatasetSize: " + dataset.size(), Toast.LENGTH_SHORT).show();
-			for(int i = 0; i < dataset.size(); i++) {
-				bw.write(dataset.get(i).toString());
+			FileWriter fw = null;
+			BufferedWriter bw = null;
+			
+			try {
+				file.createNewFile();
+				fw = new FileWriter(file);
+				bw = new BufferedWriter(fw);
+				
+				Log.i("MicrosoftProject", "DatasetSize: " + dataset.size());
+				Toast.makeText(getApplicationContext(), dataset.size() + getResources().getString(R.string.service_numberofpoints_message), Toast.LENGTH_SHORT).show();
+				for(int i = 0; i < dataset.size(); i++) {
+					bw.write(dataset.get(i).toString());
+				}
+				
+				bw.close();
+				fw.close();
 			}
-			
-			bw.close();
-			fw.close();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-			success = false;
+			catch(IOException e) {
+				e.printStackTrace();
+				success = false;
+			}
 		}
 		
 		// remove listeners
@@ -168,12 +170,12 @@ public class GpsService extends Service {
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			// 
+			// TODO Auto-generated method stub
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
-			//
+			// TODO Auto-generated method stub
 		}
 
 	}

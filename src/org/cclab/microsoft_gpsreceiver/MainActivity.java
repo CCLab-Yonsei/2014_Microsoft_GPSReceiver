@@ -16,7 +16,7 @@ import android.widget.ToggleButton;
 public class MainActivity extends Activity {
 	
 	private ToggleButton button_startstop;
-	private TextView tv;
+	private TextView tv_gpsstatus;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,30 +24,42 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		button_startstop = (ToggleButton)findViewById(R.id.togglebutton_startstop);
-		tv = (TextView)findViewById(R.id.text_loggingstatus);
+		tv_gpsstatus = (TextView)findViewById(R.id.text_gpsstatus);
+	}
+	
+	@Override 
+	protected void onResume() {
+		super.onResume();
 		
 		// TODO is it needed?
 		// if GpsService is already running, turn on the toggle button 
 		final boolean serviceRunning = isServiceRunning(GpsService.class.getName());
 		if(serviceRunning) {
 			button_startstop.setChecked(true);
-			tv.setText(R.string.text_loggingstatus_on);
+			tv_gpsstatus.setText(R.string.main_text_loggingstatus_on);
 		}
 		else {
 			button_startstop.setChecked(false);
-			tv.setText(R.string.text_loggingstatus_off);
+			tv_gpsstatus.setText(R.string.main_text_loggingstatus_off);
 		}
 		
+		// TODO if GPS turns off? 
 	}
 	
+	/**
+	 * Logging toggle button onClick listener
+	 * 
+	 * @author ipuris
+	 * @param v
+	 */
 	public void onLogging(View v) {
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			final String question = getResources().getString(R.string.alert_enable_gps_question); 
-			final String yes = getResources().getString(R.string.alert_enable_gps_yes);
-			final String no = getResources().getString(R.string.alert_enable_gps_no);
+			final String question = getResources().getString(R.string.main_alert_enable_gps_question); 
+			final String yes = getResources().getString(R.string.main_alert_enable_gps_yes);
+			final String no = getResources().getString(R.string.main_alert_enable_gps_no);
 			
 			builder.setMessage(question).setCancelable(false).setPositiveButton(yes, new DialogInterface.OnClickListener() {
 				public void onClick(final DialogInterface dialog, final int id) {
@@ -64,11 +76,11 @@ public class MainActivity extends Activity {
 		}
 		else {
 			if(button_startstop.isChecked()) {
-				tv.setText(R.string.text_loggingstatus_on);
+				tv_gpsstatus.setText(R.string.main_text_loggingstatus_on);
 				startService(new Intent(this, GpsService.class));
 			}
 			else {
-				tv.setText(R.string.text_loggingstatus_off);
+				tv_gpsstatus.setText(R.string.main_text_loggingstatus_off);
 				stopService(new Intent(this, GpsService.class));
 			}
 		}

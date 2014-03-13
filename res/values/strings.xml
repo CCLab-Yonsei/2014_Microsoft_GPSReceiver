@@ -4,12 +4,16 @@
     <string name="app_name">CCLab GPS</string>
     <string name="service_start">GPS logging is successfully started.</string>
     <string name="service_stop">GPS logging is successfully finished.</string>
-    <string name="button_logging_start">Start logging</string>
-    <string name="button_logging_stop">Stop logging</string>
-    <string name="text_loggingstatus_on">Now logging</string>
-    <string name="text_loggingstatus_off">NOT logging</string>
-    <string name="alert_enable_gps_question">Your GPS seems to be disabled, do you want to enable it?</string>
-    <string name="alert_enable_gps_yes">Yes</string>
-    <string name="alert_enable_gps_no">No</string>
+    <string name="service_error">Something goes wrong!</string>
+    <string name="service_numberofpoints_message">points are collected.</string>
+    <string name="main_button_logging_start">Start logging</string>
+    <string name="main_button_logging_stop">Stop logging</string>
+    <string name="main_text_thanks">Thanks for your contribution</string>
+    <string name="main_text_loggingstatus_on">Now logging</string>
+    <string name="main_text_loggingstatus_off">NOT logging</string>
+    <string name="main_alert_enable_gps_question">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="main_alert_enable_gps_yes">Yes</string>
+    <string name="main_alert_enable_gps_no">No</string>
+    <string name="main_contentsdescription_mainimage">Sky</string>
 
 </resources>
