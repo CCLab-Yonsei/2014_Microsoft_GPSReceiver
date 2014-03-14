@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -24,12 +25,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <service
             android:name="org.cclab.microsoft_gpsreceiver.GpsService"
             android:enabled="true" >
-            
         </service>
+
+        <activity
+            android:name="org.cclab.microsoft_gpsreceiver.board.BoardActivity"
+            android:label="@string/title_activity_board" >
+        </activity>
     </application>
 
 </manifest>

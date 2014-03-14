@@ -102,4 +102,15 @@ public class MainActivity extends Activity {
 		}
 		return false;
 	}
+	
+	/**
+	 * Board button onClick listener
+	 * 
+	 * @param v
+	 */
+	public void onBoard(View v) {
+		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.board.BoardActivity.class);
+		startActivity(intent);
+	}
+	
 }

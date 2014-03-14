@@ -15,5 +15,8 @@
     <string name="main_alert_enable_gps_yes">Yes</string>
     <string name="main_alert_enable_gps_no">No</string>
     <string name="main_contentsdescription_mainimage">Sky</string>
+    <string name="title_activity_board">BoardActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
