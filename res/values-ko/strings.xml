@@ -15,5 +15,7 @@
     <string name="main_alert_enable_gps_yes">설정 화면으로 가기</string>
     <string name="main_alert_enable_gps_no">닫기</string>
     <string name="main_contentsdescription_mainimage">하늘</string>
+    <string name="widget_start">시작</string>
+    <string name="widget_stop">중지</string>
     
 </resources>
