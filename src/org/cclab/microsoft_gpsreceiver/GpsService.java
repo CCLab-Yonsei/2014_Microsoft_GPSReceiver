@@ -4,8 +4,19 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Service;
 import android.content.Context;
@@ -122,6 +133,20 @@ public class GpsService extends Service {
 				e.printStackTrace();
 				success = false;
 			}
+			
+			// send data to server
+			ArrayList<BasicNameValuePair> paramList = new ArrayList<BasicNameValuePair>();
+			paramList.add(new BasicNameValuePair("Contributor ID", "id"));
+			for(GpsData gps : dataset) {
+				// TODO add gps dataset to paramList
+			}
+			
+			BasicNameValuePair[] params = new BasicNameValuePair[paramList.size()];
+			for(int i = 0; i < paramList.size(); i++) {
+				params[i] = paramList.get(i);
+			}
+			
+			new SendPost().execute(params);
 		}
 		
 		// remove listeners

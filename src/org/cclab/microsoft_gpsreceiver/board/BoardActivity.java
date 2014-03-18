@@ -36,7 +36,7 @@ public class BoardActivity extends ListActivity {
 		listView.setOnRefreshListener(refreshListener);
 		listView.setOnLastItemVisibleListener(lastListener);
 		
-		adapter = new BoardAdapter()
+		// adapter = new BoardAdapter()
 		
 		
 	}
