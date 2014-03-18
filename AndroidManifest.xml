@@ -18,11 +18,12 @@
         android:theme="@style/AppBaseTheme" >
         
         <receiver 
-            android:name="org.cclab.microsoft_gpsreceiver.Widget">     
+            android:name="org.cclab.microsoft_gpsreceiver.widget.Widget">     
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="org.cclab.microsoft_gpsreceiver.widget.action.GPSSTART" />
-                <action android:name="org.cclab.microsoft_gpsreceiver.widget.action.GPSSTOP" />
+                <action android:name="org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_BUTTON_CLICK" />
+                <action android:name="org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_LOGGING_ON" />
+                <action android:name="org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_LOGGING_OFF" />
             </intent-filter>
             
             <meta-data 

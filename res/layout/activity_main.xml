@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -44,20 +45,21 @@
         android:layout_marginBottom="50dp"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
-    
+
+        <!-- 
         <Button
             android:id="@+id/goto_board"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="GO BOARD!!!!!!"
-            android:onClick="onBoard"
-            />
-        
+            android:onClick="onBoard" />
+         -->
+         
 	    <ToggleButton
 	        android:id="@+id/togglebutton_startstop"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:onClick="onLogging"
+	        android:onClick="onLoggingButtonTouch"
 	        android:textOff="@string/main_button_logging_start"
 	        android:textOn="@string/main_button_logging_stop" />
 	

@@ -1,8 +1,8 @@
 package org.cclab.microsoft_gpsreceiver;
 
+import org.cclab.microsoft_gpsreceiver.widget.Widget;
+
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,9 +31,8 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
-		// TODO is it needed?
 		// if GpsService is already running, turn on the toggle button 
-		final boolean serviceRunning = isServiceRunning(GpsService.class.getName());
+		final boolean serviceRunning = Utility.isServiceRunning(getApplicationContext(), GpsService.class.getName());
 		if(serviceRunning) {
 			button_startstop.setChecked(true);
 			tv_gpsstatus.setText(R.string.main_text_loggingstatus_on);
@@ -52,7 +51,7 @@ public class MainActivity extends Activity {
 	 * @author ipuris
 	 * @param v
 	 */
-	public void onLogging(View v) {
+	public void onLoggingButtonTouch(View v) {
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -78,29 +77,18 @@ public class MainActivity extends Activity {
 			if(button_startstop.isChecked()) {
 				tv_gpsstatus.setText(R.string.main_text_loggingstatus_on);
 				startService(new Intent(this, GpsService.class));
+				
+				Intent intent = new Intent(Widget.intentCurrentStateLoggingOn);
+				sendBroadcast(intent);
 			}
 			else {
 				tv_gpsstatus.setText(R.string.main_text_loggingstatus_off);
 				stopService(new Intent(this, GpsService.class));
+				
+				Intent intent = new Intent(Widget.intentCurrentStateLoggingOff);
+				sendBroadcast(intent);
 			}
 		}
-	}
-	
-	/**
-	 * Check whether a service is running or not
-	 * 
-	 * @author ipuris
-	 * @param serviceName Strongly recommended to use 'MyService.class.getName()'.
-	 * @return
-	 */
-	private boolean isServiceRunning(final String serviceName) {
-		ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-		for(RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if(serviceName.equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	/**
