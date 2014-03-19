@@ -4,12 +4,14 @@ import org.cclab.microsoft_gpsreceiver.GpsService;
 import org.cclab.microsoft_gpsreceiver.R;
 import org.cclab.microsoft_gpsreceiver.Utility;
 
+import android.R.color;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -40,7 +42,7 @@ public class Widget extends AppWidgetProvider {
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, 0);
 			
 			RemoteViews widgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-			widgetLayoutView.setOnClickPendingIntent(R.id.widget_textview, pendingIntent);
+			widgetLayoutView.setOnClickPendingIntent(R.id.widget_imgbtn, pendingIntent);
 			
 			// 
 			// check if GPS logging service is running 
@@ -49,9 +51,11 @@ public class Widget extends AppWidgetProvider {
 			RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 			if(isServiceRunning) {
 				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 			}
 			else {
 				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 			}
 			
 			//
@@ -75,21 +79,29 @@ public class Widget extends AppWidgetProvider {
 			if(isServiceRunning) {
 				context.stopService(new Intent(context, GpsService.class));
 				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+				remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 			}
 			else {
 				context.startService(new Intent(context, GpsService.class));
 				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+				remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 			}
 		}
 		// from start logging from MainActivity
 		else if(intent.getAction().equals(intentCurrentStateLoggingOn)) {
 			Log.i("Widget", "On");
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
+			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 		}
 		// from finish logging from MainActivity
 		else if(intent.getAction().equals(intentCurrentStateLoggingOff)) {
 			Log.i("Widget", "Off");
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
+			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 		}
 		
 		// update
