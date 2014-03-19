@@ -7,10 +7,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
@@ -25,6 +28,13 @@ public class MainActivity extends Activity {
 
 		button_startstop = (ToggleButton)findViewById(R.id.togglebutton_startstop);
 		tv_gpsstatus = (TextView)findViewById(R.id.text_gpsstatus);
+		
+		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
+		boolean initialized = settings.getBoolean(Constants.PREFS_INITIALIZED, false);
+		if(!initialized) {
+			Intent intent = new Intent(this, RegistrationActivity.class);
+			startActivityForResult(intent, Constants.REQCODE_USER_REGISTRATION);
+		}
 	}
 	
 	@Override 
@@ -43,6 +53,23 @@ public class MainActivity extends Activity {
 		}
 		
 		// TODO if GPS turns off? 
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode == Constants.REQCODE_USER_REGISTRATION) {
+			if(resultCode == Activity.RESULT_OK) {
+				Log.i("MainActivity", "Student ID is successfully stored");
+				
+				Toast.makeText(this, getResources().getString(R.string.main_toast_studentid_confirmed), Toast.LENGTH_SHORT).show();
+			}
+			else if(resultCode == Activity.RESULT_CANCELED) {
+				Log.i("MainActivity", "Student ID is NOT stored");
+				
+				Toast.makeText(this, getResources().getString(R.string.main_toast_studentid_notconfirmed), Toast.LENGTH_SHORT).show();
+				System.exit(0);
+			}
+		}
 	}
 	
 	/**

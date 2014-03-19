@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import org.apache.http.message.BasicNameValuePair;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -90,18 +88,21 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
-		if(dataset.size() > 0) { 
+		if(dataset.size() >= 0) { 
 			// save data to file
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(System.currentTimeMillis());
-			File file = new File(directory + "/" + 
-					"" + "_" + // user id 
+			
+			final String filepath = directory + "/" + 
+					Utility.getUserId(this) + "_" + // user id 
 					cal.get(Calendar.YEAR) + 
 					Utility.getTwoDigitNumber(cal.get(Calendar.MONTH) + 1) +  
 					Utility.getTwoDigitNumber(cal.get(Calendar.DATE)) + "_" + 
-					Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
-					Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + ":" + 
-					Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt");
+					Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) +  
+					Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + 
+					Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt";
+			
+			File file = new File(filepath);
 			
 			FileWriter fw = null;
 			BufferedWriter bw = null;
@@ -113,6 +114,7 @@ public class GpsService extends Service {
 				
 				Log.i("MicrosoftProject", "DatasetSize: " + dataset.size());
 				Toast.makeText(getApplicationContext(), dataset.size() + getResources().getString(R.string.service_numberofpoints_message), Toast.LENGTH_SHORT).show();
+				bw.write("TESTSETSET"); // test input
 				for(int i = 0; i < dataset.size(); i++) {
 					bw.write(dataset.get(i).toString());
 				}
@@ -125,20 +127,12 @@ public class GpsService extends Service {
 				success = false;
 			}
 			
-			// send data to server
-			ArrayList<BasicNameValuePair> paramList = new ArrayList<BasicNameValuePair>();
-			paramList.add(new BasicNameValuePair("Contributor ID", "id"));
-			for(GpsData gps : dataset) {
-				// TODO add gps dataset to paramList
-			}
-			
-			BasicNameValuePair[] params = new BasicNameValuePair[paramList.size()];
-			for(int i = 0; i < paramList.size(); i++) {
-				params[i] = paramList.get(i);
-			}
-			
-			new SendPost().execute(params);
+			// send file to server
+			new SendPost().execute(filepath);
+
 		}
+		
+		
 		
 		// remove listeners
 		locationManager.removeUpdates(locationListener);

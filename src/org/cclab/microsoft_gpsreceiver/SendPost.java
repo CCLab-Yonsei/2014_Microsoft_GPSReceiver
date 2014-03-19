@@ -1,56 +1,107 @@
 package org.cclab.microsoft_gpsreceiver;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
-public class SendPost extends AsyncTask<NameValuePair, Void, String> {
+public class SendPost extends AsyncTask<String, Void, String> {
 
-	private final String serverUri = "http://165.132.120.151";
-	
+	private final String urlServer = "http://165.132.120.151/msproject/gettxt";
+
 	@Override
-	protected String doInBackground(NameValuePair... params) {
+	protected String doInBackground(String... params) {
 		
-		ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-		for(int i=0; i<params.length; i++) {
-			pairs.add(params[i]);
-		}
+		HttpURLConnection connection = null;
+		DataOutputStream outputStream = null;
 		
-		HttpClient client = new DefaultHttpClient();
+		final String pathToOurFile = params[0];
+		final String lineEnd = "\r\n";
+		final String twoHyphens = "--";
+		final String boundary = "*****";
 		
-		HttpParams httpParams = client.getParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, 5000); // connection timeout = 5s
-		HttpConnectionParams.setSoTimeout(httpParams, 5000); // socket timeout = 5s
+		int bytesRead;
+		int bytesAvailable;
+		int bufferSize;
+		byte[] buffer;
+		int maxBufferSize = 1 * 1024 * 1024;
 		
-		HttpPost httpPost = new HttpPost(serverUri);
+		int responseCode = -1;
 		
 		try {
-			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(pairs);
-			httpPost.setEntity(entity);
-			HttpResponse response = client.execute(httpPost);
+			FileInputStream fileInputStream = new FileInputStream(new File(pathToOurFile));
 			
-			return EntityUtils.getContentCharSet(entity);
-		} catch (ClientProtocolException e) {
+			URL url = new URL(urlServer);
+			connection = (HttpURLConnection)url.openConnection();
+			
+			// allow inputs & outputs
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+			
+			// enable POST method
+			connection.setRequestMethod("POST");
+			
+			connection.setRequestProperty("Connection", "Keep-Alive");
+			connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+			
+			outputStream = new DataOutputStream(connection.getOutputStream());
+			outputStream.writeBytes(twoHyphens + boundary + lineEnd);;
+			outputStream.writeBytes("Content-Disposition: form-data; name=\"file1\";filename=\"" + pathToOurFile +"\"" + lineEnd);
+			outputStream.writeBytes(lineEnd);
+			
+			bytesAvailable = fileInputStream.available();
+			bufferSize = Math.min(bytesAvailable, maxBufferSize);
+			buffer = new byte[bufferSize];
+			
+			// read file
+			bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			
+			while (bytesRead > 0)
+			{
+				outputStream.write(buffer, 0, bufferSize);
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			}
+
+			outputStream.writeBytes(lineEnd);
+			outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+			// Responses from the server (code and message)
+			final int serverResponseCode = connection.getResponseCode();
+			final String serverResponseMessage = connection.getResponseMessage();
+
+			responseCode = serverResponseCode;
+			
+			Log.i("GpsService", "ResponseCode: " + serverResponseCode);
+			Log.i("GpsService", "ResponseMessage: " + serverResponseMessage);
+			
+			fileInputStream.close();
+			outputStream.flush();
+			outputStream.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return responseCode + "";
 	}
-	
+
 	@Override
 	protected void onPostExecute(String result) {
 		// tasks to be executed after everything is done

@@ -69,7 +69,6 @@ public class Widget extends AppWidgetProvider {
 		super.onReceive(context, intent);
 		
 		Log.i("Widget", "onReceive");
-		Log.i("Widget", "Action: " + intent.getAction());
 		
 		RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		ComponentName watchWidget = new ComponentName(context, Widget.class);
