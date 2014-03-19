@@ -4,13 +4,11 @@ import org.cclab.microsoft_gpsreceiver.GpsService;
 import org.cclab.microsoft_gpsreceiver.R;
 import org.cclab.microsoft_gpsreceiver.Utility;
 
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.LocationManager;
@@ -25,8 +23,6 @@ public class Widget extends AppWidgetProvider {
 	public static final String intentCurrentStateLoggingOff = "org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_LOGGING_OFF";
 	
 	private final String actionButtonClick = "org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_BUTTON_CLICK";
-	
-	private Context mContext;
 	
 	@Override
 	public void onEnabled(Context context) {
@@ -75,8 +71,6 @@ public class Widget extends AppWidgetProvider {
 		Log.i("Widget", "onReceive");
 		Log.i("Widget", "Action: " + intent.getAction());
 		
-		mContext = context;
-		
 		RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		ComponentName watchWidget = new ComponentName(context, Widget.class);
 		
@@ -84,12 +78,14 @@ public class Widget extends AppWidgetProvider {
 		boolean isServiceRunning = Utility.isServiceRunning(context, GpsService.class.getName());
 		if(intent.getAction().equals(actionButtonClick)) {
 			
-			
-			
 			// check whether GPS is enabled or not
 			final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 			if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				Toast.makeText(context, R.string.main_alert_enable_gps_question, Toast.LENGTH_SHORT).show();
+				
+				Intent settingsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(settingsIntent);
 			}
 			else {
 				if(isServiceRunning) {
