@@ -90,14 +90,12 @@
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
-        <!-- 
         <Button
             android:id="@+id/goto_board"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="GO BOARD!!!!!!"
             android:onClick="onBoardListener" />
-         -->
          
 	    <ToggleButton
 	        android:id="@+id/mainactivity_togglebutton_startstop"

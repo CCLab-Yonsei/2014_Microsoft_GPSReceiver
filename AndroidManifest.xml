@@ -56,6 +56,10 @@
             android:enabled="true" >
         </service>
 
+		<activity 
+            android:name="org.cclab.microsoft_gpsreceiver.board.DetailActivity"
+            android:label="">
+        </activity>
     </application>
 
 </manifest>
