@@ -1,4 +1,4 @@
-package org.cclab.microsoft_gpsreceiver;
+package org.cclab.microsoft_gpsreceiver.network;
 
 import java.io.DataOutputStream;
 import java.io.File;

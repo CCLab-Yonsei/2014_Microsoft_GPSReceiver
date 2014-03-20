@@ -1,5 +1,15 @@
 package org.cclab.microsoft_gpsreceiver;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.cclab.microsoft_gpsreceiver.network.SendGet;
 import org.cclab.microsoft_gpsreceiver.widget.Widget;
 
 import android.app.Activity;
@@ -155,13 +165,21 @@ public class MainActivity extends Activity {
 		
 		// get total contribution
 		int totalContribution = -1;
+		try {
+			String totalContributionStr = new SendGet().execute("http://165.132.120.151/row_count.aspx").get();
+			totalContribution = Integer.valueOf(totalContributionStr.substring(0, totalContributionStr.indexOf('\n')).trim());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		
 		// update 
 		final int currentContribution = settings.getInt(Constants.PREFS_CONTRIBUTION, 0);
 		final float ratio = (float) ((float)currentContribution / (float)totalContribution * 100.0);
 		
 		TextView tvContribution = (TextView)findViewById(R.id.mainactivity_textview_contribution);
-		tvContribution.setText(getResources().getString(R.string.main_textview_contribution) + "   " + currentContribution + " / " + totalContribution + "(" + ratio + "%)");
+		tvContribution.setText(getResources().getString(R.string.main_textview_contribution) + "   " + currentContribution + " / " + totalContribution + " (" + String.format("%.2f", ratio) + "%)");
 	}
 	
 }
