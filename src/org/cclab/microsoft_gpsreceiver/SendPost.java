@@ -15,7 +15,7 @@ import android.util.Log;
 
 public class SendPost extends AsyncTask<String, Void, String> {
 
-	private final String urlServer = "http://165.132.120.151/msproject/gettxt";
+	private final String urlServer = "http://165.132.120.151/GPS";
 
 	@Override
 	protected String doInBackground(String... params) {
@@ -55,7 +55,7 @@ public class SendPost extends AsyncTask<String, Void, String> {
 			
 			outputStream = new DataOutputStream(connection.getOutputStream());
 			outputStream.writeBytes(twoHyphens + boundary + lineEnd);;
-			outputStream.writeBytes("Content-Disposition: form-data; name=\"file1\";filename=\"" + pathToOurFile +"\"" + lineEnd);
+			outputStream.writeBytes("Content-Disposition: form-data; name=\"gpsfile\";filename=\"" + pathToOurFile +"\"" + lineEnd);
 			outputStream.writeBytes(lineEnd);
 			
 			bytesAvailable = fileInputStream.available();

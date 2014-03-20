@@ -10,6 +10,7 @@ import java.util.Calendar;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -88,7 +89,7 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
-		if(dataset.size() >= 0) { 
+		if(dataset.size() > 0) { 
 			// save data to file
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(System.currentTimeMillis());
@@ -114,7 +115,6 @@ public class GpsService extends Service {
 				
 				Log.i("MicrosoftProject", "DatasetSize: " + dataset.size());
 				Toast.makeText(getApplicationContext(), dataset.size() + getResources().getString(R.string.service_numberofpoints_message), Toast.LENGTH_SHORT).show();
-				bw.write("TESTSETSET"); // test input
 				for(int i = 0; i < dataset.size(); i++) {
 					bw.write(dataset.get(i).toString());
 				}
@@ -130,6 +130,13 @@ public class GpsService extends Service {
 			// send file to server
 			new SendPost().execute(filepath);
 
+			// update contribution
+			SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
+			int currentContribution = settings.getInt(Constants.PREFS_CONTRIBUTION, 0);
+			
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putInt(Constants.PREFS_CONTRIBUTION, currentContribution + dataset.size());
+			editor.commit();
 		}
 		
 		

@@ -13,15 +13,17 @@
     <!-- MainActivity -->
     <string name="main_button_logging_start">기록 시작하기</string>
     <string name="main_button_logging_stop">기록 멈추기</string>
-    <string name="main_text_thanks">Thanks for your contribution</string>
-    <string name="main_text_loggingstatus_on">현재 GPS 기록 중입니다.</string>
-    <string name="main_text_loggingstatus_off">현재 GPS 기록 중이 아닙니다.</string>
+    <string name="main_textview_thanks">Thanks for your contribution</string>
+    <string name="main_textview_loggingstatus_on">현재 GPS 기록 중입니다.</string>
+    <string name="main_textview_loggingstatus_off">현재 GPS 기록 중이 아닙니다.</string>
+    <string name="main_textview_contributor">Contributor: </string>
+    <string name="main_textview_contribution">Contribution: </string>
     <string name="main_alert_enable_gps_question">GPS가 꺼져 있습니다. 위치 기록을 위해 설정에서 GPS를 켜야 합니다.</string>
     <string name="main_alert_enable_gps_yes">설정 화면으로 가기</string>
     <string name="main_alert_enable_gps_no">닫기</string>
     <string name="main_contentsdescription_mainimage">하늘</string>
     <string name="main_toast_studentid_confirmed">학번이 성공적으로 저장되었습니다.</string>
-    <string name="main_toast_studentid_notconfirmed">학번이 꼭 필요합니다!</string>
+    <string name="main_toast_studentid_needed">학번을 꼭 입력해야 합니다!</string>
     
     <!-- Widget -->
     <string name="widget_on">기록 중</string>
