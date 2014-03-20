@@ -90,4 +90,19 @@ public class Utility {
 	    }
 	    return new String( hexChars );
 	}
+	
+	public static boolean isAdmin(Context context) {
+		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS, 0);
+		final String userid = settings.getString(Constants.PREFS_USERID, "");
+		
+		String[] administrators = {};
+		
+		for(String administrator : administrators) {
+			if(administrator.equals(userid)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
