@@ -10,6 +10,7 @@ import java.util.Calendar;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -92,14 +93,17 @@ public class GpsService extends Service {
 			// save data to file
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(System.currentTimeMillis());
-			File file = new File(directory + "/" + 
-					"" + "_" + // user id 
+			
+			final String filepath = directory + "/" + 
+					Utility.getUserId(this) + "_" + // user id 
 					cal.get(Calendar.YEAR) + 
 					Utility.getTwoDigitNumber(cal.get(Calendar.MONTH) + 1) +  
 					Utility.getTwoDigitNumber(cal.get(Calendar.DATE)) + "_" + 
-					Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
-					Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + ":" + 
-					Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt");
+					Utility.getTwoDigitNumber(cal.get(Calendar.HOUR_OF_DAY)) +  
+					Utility.getTwoDigitNumber(cal.get(Calendar.MINUTE)) + 
+					Utility.getTwoDigitNumber(cal.get(Calendar.SECOND)) + ".txt";
+			
+			File file = new File(filepath);
 			
 			FileWriter fw = null;
 			BufferedWriter bw = null;
@@ -122,7 +126,20 @@ public class GpsService extends Service {
 				e.printStackTrace();
 				success = false;
 			}
+			
+			// send file to server
+			new SendPost().execute(filepath);
+
+			// update contribution
+			SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
+			int currentContribution = settings.getInt(Constants.PREFS_CONTRIBUTION, 0);
+			
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putInt(Constants.PREFS_CONTRIBUTION, currentContribution + dataset.size());
+			editor.commit();
 		}
+		
+		
 		
 		// remove listeners
 		locationManager.removeUpdates(locationListener);

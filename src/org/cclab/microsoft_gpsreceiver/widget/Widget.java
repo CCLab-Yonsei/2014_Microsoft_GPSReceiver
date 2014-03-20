@@ -10,8 +10,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.LocationManager;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 
 public class Widget extends AppWidgetProvider {
@@ -40,7 +43,7 @@ public class Widget extends AppWidgetProvider {
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, 0);
 			
 			RemoteViews widgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-			widgetLayoutView.setOnClickPendingIntent(R.id.widget_textview, pendingIntent);
+			widgetLayoutView.setOnClickPendingIntent(R.id.widget_imgbtn, pendingIntent);
 			
 			// 
 			// check if GPS logging service is running 
@@ -49,9 +52,11 @@ public class Widget extends AppWidgetProvider {
 			RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 			if(isServiceRunning) {
 				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 			}
 			else {
 				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 			}
 			
 			//
@@ -64,7 +69,6 @@ public class Widget extends AppWidgetProvider {
 		super.onReceive(context, intent);
 		
 		Log.i("Widget", "onReceive");
-		Log.i("Widget", "Action: " + intent.getAction());
 		
 		RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		ComponentName watchWidget = new ComponentName(context, Widget.class);
@@ -72,24 +76,44 @@ public class Widget extends AppWidgetProvider {
 		// check if GPS logging service is running 
 		boolean isServiceRunning = Utility.isServiceRunning(context, GpsService.class.getName());
 		if(intent.getAction().equals(actionButtonClick)) {
-			if(isServiceRunning) {
-				context.stopService(new Intent(context, GpsService.class));
-				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+			
+			// check whether GPS is enabled or not
+			final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+			if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				Toast.makeText(context, R.string.main_alert_enable_gps_question, Toast.LENGTH_SHORT).show();
+				
+				Intent settingsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(settingsIntent);
 			}
 			else {
-				context.startService(new Intent(context, GpsService.class));
-				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+				if(isServiceRunning) {
+					context.stopService(new Intent(context, GpsService.class));
+					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
+					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
+				}
+				else {
+					context.startService(new Intent(context, GpsService.class));
+					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
+					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
+				}
 			}
 		}
 		// from start logging from MainActivity
 		else if(intent.getAction().equals(intentCurrentStateLoggingOn)) {
 			Log.i("Widget", "On");
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
+			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 		}
 		// from finish logging from MainActivity
 		else if(intent.getAction().equals(intentCurrentStateLoggingOff)) {
 			Log.i("Widget", "Off");
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
+			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 		}
 		
 		// update

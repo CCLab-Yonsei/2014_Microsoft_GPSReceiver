@@ -13,21 +13,30 @@
     <!-- MainActivity -->
     <string name="main_button_logging_start">Start logging</string>
     <string name="main_button_logging_stop">Stop logging</string>
-    <string name="main_text_thanks">Thanks for your contribution</string>
-    <string name="main_text_loggingstatus_on">Now logging</string>
-    <string name="main_text_loggingstatus_off">NOT logging</string>
+    <string name="main_textview_thanks">Thanks for your contribution</string>
+    <string name="main_textview_loggingstatus_on">Now logging</string>
+    <string name="main_textview_loggingstatus_off">NOT logging</string>
+    <string name="main_textview_contributor">Contributor: </string>
+    <string name="main_textview_contribution">Contribution: </string>
     <string name="main_alert_enable_gps_question">Your GPS seems to be disabled, do you want to enable it?</string>
     <string name="main_alert_enable_gps_yes">Yes</string>
     <string name="main_alert_enable_gps_no">No</string>
     <string name="main_contentsdescription_mainimage">Sky</string>
+    <string name="main_toast_studentid_confirmed">Student ID is successfully stored</string>
+    <string name="main_toast_studentid_needed">Student ID must be needed</string>
     
     <!-- Widget -->
     <string name="widget_on">On Logging</string>
     <string name="widget_off">Start Logging</string>
     
+    <!-- Registration -->
+    <string name="registration_activity_title">RegistrationActivity</string>
+    <string name="registration_button_confirm">Confirm</string>
+    <string name="registration_string_userid_hint">2013000000</string>
+    
     <!-- BoardActivity -->
-    <string name="title_activity_board">BoardActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="board_activity_title">BoardActivity</string>
+    <string name="board_settings">Settings</string>
+    <string name="board_hello_world">Hello world!</string>
     
 </resources>

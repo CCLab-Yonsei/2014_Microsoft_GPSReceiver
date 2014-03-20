@@ -29,7 +29,7 @@
             
             <meta-data 
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_provider"/>
+                android:resource="@xml/widget_provider" />
         </receiver>
         
         <activity
@@ -41,21 +41,25 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.cclab.microsoft_gpsreceiver.board.BoardActivity"
+            android:label="@string/board_activity_title" >
+        </activity>
+        
+        <activity
+            android:name="org.cclab.microsoft_gpsreceiver.RegistrationActivity"
+            android:label="@string/registration_activity_title" >
+        </activity>
+        
         <service
             android:name="org.cclab.microsoft_gpsreceiver.GpsService"
             android:enabled="true" >
         </service>
 
-        <activity
-            android:name="org.cclab.microsoft_gpsreceiver.board.BoardActivity"
-            android:label="@string/title_activity_board" >
-        </activity>
-        
-        <activity 
+		<activity 
             android:name="org.cclab.microsoft_gpsreceiver.board.DetailActivity"
             android:label="">
         </activity>
     </application>
-    
 
 </manifest>

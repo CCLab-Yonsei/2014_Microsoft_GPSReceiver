@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_layout"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:padding="@dimen/widget_margin" >
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/widget_margin"
+    android:gravity="center_vertical" >
+    
+    <ImageButton 
+        android:id="@+id/widget_imgbtn"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_action_location_off_dark" />
  	
 	<TextView 
 	    android:id="@+id/widget_textview"
@@ -13,6 +21,7 @@
 	    android:gravity="center"
 	    android:clickable="true"
 	    android:padding="5dp"
-	    android:text="@string/widget_off" />	
+	    android:text="@string/widget_off"
+	    android:textColor="#d3d3d3" />	
 	
-</RelativeLayout>
+</LinearLayout>

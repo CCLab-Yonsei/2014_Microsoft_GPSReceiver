@@ -62,6 +62,8 @@ public class BoardActivity extends ListActivity {
 		boards = new ArrayList<Board>();
 		// Set example data to lists
 		// addExampleBorads();
+
+		// adapter = new BoardAdapter()
 		
 		adapter = new BoardAdapter(this, R.layout.board_row, boards);
 		ptrListView.setAdapter(adapter);
