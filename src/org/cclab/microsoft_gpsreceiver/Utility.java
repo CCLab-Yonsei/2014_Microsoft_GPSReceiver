@@ -91,11 +91,18 @@ public class Utility {
 	    return new String( hexChars );
 	}
 	
+	/**
+	 * Check whether the user is an administrator or not  
+	 * 
+	 * @author ipuris
+	 * @param context
+	 * @return
+	 */
 	public static boolean isAdmin(Context context) {
 		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS, 0);
 		final String userid = settings.getString(Constants.PREFS_USERID, "");
 		
-		String[] administrators = {};
+		String[] administrators = {"2009311758", "2011311701", "2013311487", "2013321252"};
 		
 		for(String administrator : administrators) {
 			if(administrator.equals(userid)) {
