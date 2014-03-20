@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 		}
 		
 		TextView tvStudentId = (TextView)findViewById(R.id.mainactivity_textview_studentid);
-		tvStudentId.setText(getResources().getString(R.string.main_textview_contributor) + "   " + Utility.getUserId(this));
+		tvStudentId.setText(getResources().getString(R.string.main_textview_contributor) + "   " + Utility.getStudentId(this));
 		
 		updateContribution();
 	}
@@ -64,11 +64,11 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == Constants.REQCODE_USER_REGISTRATION) {
 			if(resultCode == Activity.RESULT_OK) {
-				Log.i("MainActivity", "Student ID " + Utility.getUserId(this) + " is successfully stored");
+				Log.i("MainActivity", "Student ID " + Utility.getStudentId(this) + " is successfully stored");
 				Toast.makeText(this, getResources().getString(R.string.main_toast_studentid_confirmed), Toast.LENGTH_SHORT).show();
 				
 				TextView tvStudentId = (TextView)findViewById(R.id.mainactivity_textview_studentid);
-				tvStudentId.setText(getResources().getString(R.string.main_textview_contributor) + "   " + Utility.getUserId(this));
+				tvStudentId.setText(getResources().getString(R.string.main_textview_contributor) + "   " + Utility.getStudentId(this));
 			}
 			else if(resultCode == Activity.RESULT_CANCELED) {
 				Log.i("MainActivity", "Student ID is NOT stored");
@@ -83,7 +83,9 @@ public class MainActivity extends Activity {
 	 * @author ipuris
 	 * @param v
 	 */
-	public void onLoggingButtonTouch(View v) {
+	public void onLoggingButtonTouchListener(View v) {
+		Log.i("MainActivity", "onLoggingButtonTouchListener()");
+		
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -129,6 +131,8 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onBoardListener(View v) {
+		Log.i("MainActivity", "onBoardListener()");
+		
 		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.board.BoardActivity.class);
 		startActivity(intent);
 	}
@@ -139,11 +143,13 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onThanksTouchListener(View v) {
+		Log.i("MainActivity", "onThanksTouchListener()");
 		
 		updateContribution();
 	}
 	
 	private void updateContribution() {
+		Log.i("MainActivity", "updateContribution()");
 		
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
 		

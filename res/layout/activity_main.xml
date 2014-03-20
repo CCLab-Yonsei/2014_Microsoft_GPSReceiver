@@ -103,7 +103,7 @@
 	        android:id="@+id/mainactivity_togglebutton_startstop"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:onClick="onLoggingButtonTouch"
+	        android:onClick="onLoggingButtonTouchListener"
 	        android:textOff="@string/main_button_logging_start"
 	        android:textOn="@string/main_button_logging_stop" />
 	

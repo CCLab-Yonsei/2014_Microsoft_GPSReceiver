@@ -72,7 +72,7 @@ public class GpsService extends Service {
 		locationManager.addNmeaListener(nmeaListener);
 		
 		// success message
-		Toast.makeText(this,  getResources().getString(R.string.service_start), Toast.LENGTH_LONG).show();
+		Toast.makeText(this,  getResources().getString(R.string.service_start), Toast.LENGTH_SHORT).show();
 		
 	}
 	
@@ -95,7 +95,7 @@ public class GpsService extends Service {
 			cal.setTimeInMillis(System.currentTimeMillis());
 			
 			final String filepath = directory + "/" + 
-					Utility.getUserId(this) + "_" + // user id 
+					Utility.getStudentId(this) + "_" + // user id 
 					cal.get(Calendar.YEAR) + 
 					Utility.getTwoDigitNumber(cal.get(Calendar.MONTH) + 1) +  
 					Utility.getTwoDigitNumber(cal.get(Calendar.DATE)) + "_" + 
@@ -113,7 +113,7 @@ public class GpsService extends Service {
 				fw = new FileWriter(file);
 				bw = new BufferedWriter(fw);
 				
-				Log.i("MicrosoftProject", "DatasetSize: " + dataset.size());
+				Log.i("GpsService", "DatasetSize: " + dataset.size());
 				Toast.makeText(getApplicationContext(), dataset.size() + getResources().getString(R.string.service_numberofpoints_message), Toast.LENGTH_SHORT).show();
 				for(int i = 0; i < dataset.size(); i++) {
 					bw.write(dataset.get(i).toString());

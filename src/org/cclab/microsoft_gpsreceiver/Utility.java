@@ -38,12 +38,26 @@ public class Utility {
 		return false;
 	}
 	
-	public static String getUserId(Context context) {
+	/**
+	 * Get student ID 
+	 * 
+	 * @author ipuris
+	 * @param context
+	 * @return
+	 */
+	public static String getStudentId(Context context) {
 		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS, 0);
 		return settings.getString(Constants.PREFS_USERID, "");
 	}
 	
-	public static String getHashedUserId(Context context) {
+	/**
+	 * Get hash value of student ID 
+	 * 
+	 * @author ipuris
+	 * @param context
+	 * @return
+	 */
+	public static String getHashedStudentId(Context context) {
 		SharedPreferences settings = context.getSharedPreferences(Constants.PREFS, 0);
 		final String userid = settings.getString(Constants.PREFS_USERID, "");
 		

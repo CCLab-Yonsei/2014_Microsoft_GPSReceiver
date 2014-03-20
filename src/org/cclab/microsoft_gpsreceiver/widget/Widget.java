@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.LocationManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -32,8 +31,6 @@ public class Widget extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
-		
-		Log.i("Widget", "onUpdate");
 		
 		for(int i=0; i < appWidgetIds.length; i++) {
 			int appWidgetId = appWidgetIds[i];
@@ -68,8 +65,6 @@ public class Widget extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		
-		Log.i("Widget", "onReceive");
-		
 		RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		ComponentName watchWidget = new ComponentName(context, Widget.class);
 		
@@ -103,14 +98,12 @@ public class Widget extends AppWidgetProvider {
 		}
 		// from start logging from MainActivity
 		else if(intent.getAction().equals(intentCurrentStateLoggingOn)) {
-			Log.i("Widget", "On");
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
 			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
 			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 		}
 		// from finish logging from MainActivity
 		else if(intent.getAction().equals(intentCurrentStateLoggingOff)) {
-			Log.i("Widget", "Off");
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
 			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
 			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
