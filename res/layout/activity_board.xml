@@ -5,6 +5,7 @@
     android:orientation="vertical"
     tools:context=".BoardActivity" >
 
+     
     <Button
         android:id="@+id/button_write"
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
+        ptrAnimationStyle="flip"
         android:smoothScrollbar="true"
          />
 

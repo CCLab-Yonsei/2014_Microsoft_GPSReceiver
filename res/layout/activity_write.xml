@@ -18,6 +18,13 @@
 	    android:lines="10"
 	    />
 	
+	<CheckBox
+	    android:id="@+id/checkbox_addnotice"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:visibility="invisible"
+	    android:text="공지 등록" />
+	
 	<Button
 	    android:id="@+id/button_send"
 	    android:layout_width="match_parent"

@@ -40,12 +40,12 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 		
 		public final TextView writer;
 		public final TextView title;
-		public final TextView contents;
+		public final TextView content;
 		
-		public ViewHolder(TextView writer, TextView title, TextView contents) {
+		public ViewHolder(TextView writer, TextView title, TextView content) {
 			this.writer = writer;
 			this.title = title;
-			this.contents = contents;
+			this.content = content;
 		}
 	}
 	
@@ -69,9 +69,9 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		holder.writer.setText( items.get(position).writer );
+		holder.writer.setText( items.get(position).writer.hashedId );
 		holder.title.setText( items.get(position).title );
-		holder.contents.setText( items.get(position).contents );
+		holder.content.setText( items.get(position).content );
 		
 		return convertView;
 		

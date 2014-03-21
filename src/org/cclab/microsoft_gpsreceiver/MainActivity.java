@@ -131,7 +131,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onBoardListener(View v) {
-		Log.i("MainActivity", "onBoardListener()");
+		
 		
 		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.board.BoardActivity.class);
 		startActivity(intent);

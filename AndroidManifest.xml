@@ -57,7 +57,7 @@
         </service>
 
 		<activity 
-            android:name="org.cclab.microsoft_gpsreceiver.board.DetailActivity"
+            android:name="org.cclab.microsoft_gpsreceiver.board.WriteActivity"
             android:label="">
         </activity>
     </application>

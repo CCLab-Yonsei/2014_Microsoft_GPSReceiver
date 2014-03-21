@@ -78,6 +78,31 @@ public class Utility {
 		return null;
 	}
 	
+	/**
+	 * Get hash value of student ID 
+	 * 
+	 * @author ipuris
+	 * @param context
+	 * @return
+	 */
+	public static String getHashedValue(Context context, final String value) {
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("SHA-1");
+			byte[] useridBytes = value.getBytes();
+			byte[] salt = "A Context-aware Path Recommendation System using Crowdsourcing".getBytes();
+			digest.update(useridBytes, 0, useridBytes.length);
+			digest.update(salt, 0, salt.length);
+			byte[] result = digest.digest();
+			
+			return bytesToHex(result);
+			
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 	public static String bytesToHex( byte[] bytes )
 	{
