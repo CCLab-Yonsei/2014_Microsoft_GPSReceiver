@@ -91,8 +91,6 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
-		
-		dataset.add(new GpsData(1.0, 2.0, 3, 4, 5));
 		if(dataset.size() > 0) { 
 			// save data to file
 			Calendar cal = Calendar.getInstance();
