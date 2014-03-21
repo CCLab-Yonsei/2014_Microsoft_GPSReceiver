@@ -15,7 +15,7 @@ import android.util.Log;
 
 public class SendPost extends AsyncTask<String, Void, String> {
 
-	private final String urlServer = "http://165.132.120.151/GPS";
+	private final String urlServer = "http://165.132.120.151/GPS.aspx";
 
 	@Override
 	protected String doInBackground(String... params) {
