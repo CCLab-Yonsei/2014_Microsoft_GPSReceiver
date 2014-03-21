@@ -6,15 +6,12 @@ import org.cclab.microsoft_gpsreceiver.network.SendGet;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -34,9 +31,6 @@ public class MainActivity extends Activity {
 		// initialize member variables
 		buttonStartstop = (ToggleButton)findViewById(R.id.mainactivity_togglebutton_startstop);
 		tvGpsStatus = (TextView)findViewById(R.id.mainactivity_textview_gpsstatus);
-		
-		// register broadcast receiver
-		LocalBroadcastManager.getInstance(this).registerReceiver(mUploadCompleteReceiver,  new IntentFilter(Constants.INTENT_UPLOAD_COMPLETE_RECEIVER));
 		
 		// get default values from shared preferences
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
@@ -91,13 +85,6 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	@Override 
-	protected void onDestroy() {
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(mUploadCompleteReceiver);
-		
-		super.onDestroy();
-	}
-	
 	/**
 	 * Logging toggle button onClick listener
 	 * 
@@ -105,7 +92,6 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onLoggingButtonTouchListener(View v) {
-		Log.i("MainActivity", "onLoggingButtonTouchListener()");
 		
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -175,13 +161,14 @@ public class MainActivity extends Activity {
 	 */
 	private void updateContribution() {
 		
-		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
-		
 		// get total contribution
 		int totalContribution = -1;
+		int currentContribution = -1;
 		try {
 			String totalContributionStr = new SendGet().execute("http://165.132.120.151/row_count.aspx").get();
+			String currentContributionStr = new SendGet().execute("http://165.132.120.151/get_stdid.aspx?studentid=" + Utility.getStudentId(this)).get();
 			totalContribution = Integer.valueOf(totalContributionStr.substring(0, totalContributionStr.indexOf('\n')).trim());
+			currentContribution = Integer.valueOf(currentContributionStr.substring(0, currentContributionStr.indexOf('\n')).trim());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -189,20 +176,9 @@ public class MainActivity extends Activity {
 		}
 		
 		// update 
-		final int currentContribution = settings.getInt(Constants.PREFS_CONTRIBUTION, 0);
 		final float ratio = (float) ((float)currentContribution / (float)totalContribution * 100.0);
 		
 		TextView tvContribution = (TextView)findViewById(R.id.mainactivity_textview_contribution);
 		tvContribution.setText(getResources().getString(R.string.main_textview_contribution) + "   " + currentContribution + " / " + totalContribution + " (" + String.format("%.2f", ratio) + "%)");
 	}
-	
-	private BroadcastReceiver mUploadCompleteReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			updateContribution();
-			
-		}
-		
-	};
 }
