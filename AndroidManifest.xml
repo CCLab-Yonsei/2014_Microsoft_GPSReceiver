@@ -51,6 +51,11 @@
             android:label="@string/registration_activity_title" >
         </activity>
         
+		<activity 
+            android:name="org.cclab.microsoft_gpsreceiver.board.DetailActivity"
+            android:label="">
+        </activity>
+        
         <service
             android:name="org.cclab.microsoft_gpsreceiver.GpsService"
             android:enabled="true" >

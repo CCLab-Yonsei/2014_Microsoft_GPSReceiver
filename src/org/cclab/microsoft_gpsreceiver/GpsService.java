@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
+
+import org.cclab.microsoft_gpsreceiver.network.SendPost;
 
 import android.app.Service;
 import android.content.Context;
@@ -89,6 +92,7 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
+		dataset.add(new GpsData(1.0, 2.0, 3, 4, 5));
 		if(dataset.size() > 0) { 
 			// save data to file
 			Calendar cal = Calendar.getInstance();
@@ -128,7 +132,16 @@ public class GpsService extends Service {
 			}
 			
 			// send file to server
-			new SendPost().execute(filepath);
+			try {
+				final int responseCode = new SendPost().execute(filepath).get();
+				if(responseCode == 200) {
+					
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
 
 			// update contribution
 			SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
@@ -138,8 +151,6 @@ public class GpsService extends Service {
 			editor.putInt(Constants.PREFS_CONTRIBUTION, currentContribution + dataset.size());
 			editor.commit();
 		}
-		
-		
 		
 		// remove listeners
 		locationManager.removeUpdates(locationListener);

@@ -24,6 +24,7 @@
     <string name="main_contentsdescription_mainimage">Sky</string>
     <string name="main_toast_studentid_confirmed">Student ID is successfully stored</string>
     <string name="main_toast_studentid_needed">Student ID must be needed</string>
+    <string name="main_toast_update_contribution">Contribution is updated</string>
     
     <!-- Widget -->
     <string name="widget_on">On Logging</string>

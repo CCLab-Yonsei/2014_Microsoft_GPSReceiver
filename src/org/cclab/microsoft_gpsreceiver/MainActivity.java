@@ -1,6 +1,8 @@
 package org.cclab.microsoft_gpsreceiver;
 
-import org.cclab.microsoft_gpsreceiver.widget.Widget;
+import java.util.concurrent.ExecutionException;
+
+import org.cclab.microsoft_gpsreceiver.network.SendGet;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,9 +28,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// initialize member variables
 		buttonStartstop = (ToggleButton)findViewById(R.id.mainactivity_togglebutton_startstop);
 		tvGpsStatus = (TextView)findViewById(R.id.mainactivity_textview_gpsstatus);
 		
+		// get default values from shared preferences
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
 		boolean initialized = settings.getBoolean(Constants.PREFS_INITIALIZED, false);
 		if(!initialized) {
@@ -36,10 +40,10 @@ public class MainActivity extends Activity {
 			startActivityForResult(intent, Constants.REQCODE_USER_REGISTRATION);
 		}
 		
+		// set student ID
 		TextView tvStudentId = (TextView)findViewById(R.id.mainactivity_textview_studentid);
 		tvStudentId.setText(getResources().getString(R.string.main_textview_contributor) + "   " + Utility.getStudentId(this));
 		
-		updateContribution();
 	}
 	
 	@Override 
@@ -58,6 +62,10 @@ public class MainActivity extends Activity {
 		}
 		
 		// TODO if GPS turns off? 
+
+		// udpate contribution values
+		updateContribution();
+
 	}
 	
 	@Override
@@ -84,7 +92,6 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onLoggingButtonTouchListener(View v) {
-		Log.i("MainActivity", "onLoggingButtonTouchListener()");
 		
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -112,15 +119,16 @@ public class MainActivity extends Activity {
 				tvGpsStatus.setText(R.string.main_textview_loggingstatus_on);
 				startService(new Intent(this, GpsService.class));
 				
-				Intent intent = new Intent(Widget.intentCurrentStateLoggingOn);
+				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON);
 				sendBroadcast(intent);
 			}
 			else {
 				tvGpsStatus.setText(R.string.main_textview_loggingstatus_off);
 				stopService(new Intent(this, GpsService.class));
 				
-				Intent intent = new Intent(Widget.intentCurrentStateLoggingOff);
+				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_OFF);
 				sendBroadcast(intent);
+				
 			}
 		}
 	}
@@ -131,8 +139,6 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onBoardListener(View v) {
-		
-		
 		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.board.BoardActivity.class);
 		startActivity(intent);
 	}
@@ -143,25 +149,36 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onThanksTouchListener(View v) {
-		Log.i("MainActivity", "onThanksTouchListener()");
-		
 		updateContribution();
+		
+		Toast.makeText(this, getResources().getString(R.string.main_toast_update_contribution), Toast.LENGTH_SHORT).show();
 	}
 	
+	/**
+	 * Update contribution values
+	 *  
+	 * @author ipuris
+	 */
 	private void updateContribution() {
-		Log.i("MainActivity", "updateContribution()");
-		
-		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
 		
 		// get total contribution
 		int totalContribution = -1;
+		int currentContribution = -1;
+		try {
+			String totalContributionStr = new SendGet().execute("http://165.132.120.151/row_count.aspx").get();
+			String currentContributionStr = new SendGet().execute("http://165.132.120.151/get_stdid.aspx?studentid=" + Utility.getStudentId(this)).get();
+			totalContribution = Integer.valueOf(totalContributionStr.substring(0, totalContributionStr.indexOf('\n')).trim());
+			currentContribution = Integer.valueOf(currentContributionStr.substring(0, currentContributionStr.indexOf('\n')).trim());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 		
 		// update 
-		final int currentContribution = settings.getInt(Constants.PREFS_CONTRIBUTION, 0);
 		final float ratio = (float) ((float)currentContribution / (float)totalContribution * 100.0);
 		
 		TextView tvContribution = (TextView)findViewById(R.id.mainactivity_textview_contribution);
-		tvContribution.setText(getResources().getString(R.string.main_textview_contribution) + "   " + currentContribution + " / " + totalContribution + "(" + ratio + "%)");
+		tvContribution.setText(getResources().getString(R.string.main_textview_contribution) + "   " + currentContribution + " / " + totalContribution + " (" + String.format("%.2f", ratio) + "%)");
 	}
-	
 }
