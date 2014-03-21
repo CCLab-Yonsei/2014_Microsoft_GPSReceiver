@@ -135,8 +135,7 @@ public class GpsService extends Service {
 			try {
 				final int responseCode = new SendPost().execute(filepath).get();
 				if(responseCode == 200) {
-					Intent intent = new Intent(Constants.INTENT_UPLOAD_COMPLETE_RECEIVER);
-					sendBroadcast(intent);
+					
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
