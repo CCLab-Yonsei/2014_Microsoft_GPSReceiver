@@ -24,6 +24,7 @@
     <string name="main_contentsdescription_mainimage">하늘</string>
     <string name="main_toast_studentid_confirmed">학번이 성공적으로 저장되었습니다.</string>
     <string name="main_toast_studentid_needed">학번을 꼭 입력해야 합니다!</string>
+    <string name="main_toast_update_contribution">Contribution 정보가 업데이트 되었습니다.</string>
     
     <!-- Widget -->
     <string name="widget_on">기록 중</string>

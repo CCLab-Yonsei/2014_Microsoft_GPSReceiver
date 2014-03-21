@@ -1,5 +1,6 @@
 package org.cclab.microsoft_gpsreceiver.widget;
 
+import org.cclab.microsoft_gpsreceiver.Constants;
 import org.cclab.microsoft_gpsreceiver.GpsService;
 import org.cclab.microsoft_gpsreceiver.R;
 import org.cclab.microsoft_gpsreceiver.Utility;
@@ -18,11 +19,6 @@ import android.widget.Toast;
 
 public class Widget extends AppWidgetProvider {
 	
-	public static final String intentCurrentStateLoggingOn = "org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_LOGGING_ON";
-	public static final String intentCurrentStateLoggingOff = "org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_LOGGING_OFF";
-	
-	private final String actionButtonClick = "org.cclab.microsoft_gpsreceiver.widget.action.WIDGET_BUTTON_CLICK";
-	
 	@Override
 	public void onEnabled(Context context) {
 		super.onEnabled(context);
@@ -36,7 +32,7 @@ public class Widget extends AppWidgetProvider {
 			int appWidgetId = appWidgetIds[i];
 			
 			// 
-			Intent onclickIntent = new Intent(actionButtonClick);
+			Intent onclickIntent = new Intent(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK);
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, 0);
 			
 			RemoteViews widgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
@@ -70,7 +66,7 @@ public class Widget extends AppWidgetProvider {
 		
 		// check if GPS logging service is running 
 		boolean isServiceRunning = Utility.isServiceRunning(context, GpsService.class.getName());
-		if(intent.getAction().equals(actionButtonClick)) {
+		if(intent.getAction().equals(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK)) {
 			
 			// check whether GPS is enabled or not
 			final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -97,13 +93,13 @@ public class Widget extends AppWidgetProvider {
 			}
 		}
 		// from start logging from MainActivity
-		else if(intent.getAction().equals(intentCurrentStateLoggingOn)) {
+		else if(intent.getAction().equals(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON)) {
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
 			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
 			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 		}
 		// from finish logging from MainActivity
-		else if(intent.getAction().equals(intentCurrentStateLoggingOff)) {
+		else if(intent.getAction().equals(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_OFF)) {
 			remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
 			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
 			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);

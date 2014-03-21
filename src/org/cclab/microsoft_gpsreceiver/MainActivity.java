@@ -1,25 +1,20 @@
 package org.cclab.microsoft_gpsreceiver;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.cclab.microsoft_gpsreceiver.network.SendGet;
-import org.cclab.microsoft_gpsreceiver.widget.Widget;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -36,9 +31,14 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// initialize member variables
 		buttonStartstop = (ToggleButton)findViewById(R.id.mainactivity_togglebutton_startstop);
 		tvGpsStatus = (TextView)findViewById(R.id.mainactivity_textview_gpsstatus);
 		
+		// register broadcast receiver
+		LocalBroadcastManager.getInstance(this).registerReceiver(mUploadCompleteReceiver,  new IntentFilter(Constants.INTENT_UPLOAD_COMPLETE_RECEIVER));
+		
+		// get default values from shared preferences
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
 		boolean initialized = settings.getBoolean(Constants.PREFS_INITIALIZED, false);
 		if(!initialized) {
@@ -46,10 +46,10 @@ public class MainActivity extends Activity {
 			startActivityForResult(intent, Constants.REQCODE_USER_REGISTRATION);
 		}
 		
+		// set student ID
 		TextView tvStudentId = (TextView)findViewById(R.id.mainactivity_textview_studentid);
 		tvStudentId.setText(getResources().getString(R.string.main_textview_contributor) + "   " + Utility.getStudentId(this));
 		
-		updateContribution();
 	}
 	
 	@Override 
@@ -68,6 +68,10 @@ public class MainActivity extends Activity {
 		}
 		
 		// TODO if GPS turns off? 
+
+		// udpate contribution values
+		updateContribution();
+
 	}
 	
 	@Override
@@ -85,6 +89,13 @@ public class MainActivity extends Activity {
 				System.exit(0);
 			}
 		}
+	}
+	
+	@Override 
+	protected void onDestroy() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mUploadCompleteReceiver);
+		
+		super.onDestroy();
 	}
 	
 	/**
@@ -122,15 +133,16 @@ public class MainActivity extends Activity {
 				tvGpsStatus.setText(R.string.main_textview_loggingstatus_on);
 				startService(new Intent(this, GpsService.class));
 				
-				Intent intent = new Intent(Widget.intentCurrentStateLoggingOn);
+				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON);
 				sendBroadcast(intent);
 			}
 			else {
 				tvGpsStatus.setText(R.string.main_textview_loggingstatus_off);
 				stopService(new Intent(this, GpsService.class));
 				
-				Intent intent = new Intent(Widget.intentCurrentStateLoggingOff);
+				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_OFF);
 				sendBroadcast(intent);
+				
 			}
 		}
 	}
@@ -141,8 +153,6 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onBoardListener(View v) {
-		Log.i("MainActivity", "onBoardListener()");
-		
 		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.board.BoardActivity.class);
 		startActivity(intent);
 	}
@@ -153,13 +163,17 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onThanksTouchListener(View v) {
-		Log.i("MainActivity", "onThanksTouchListener()");
-		
 		updateContribution();
+		
+		Toast.makeText(this, getResources().getString(R.string.main_toast_update_contribution), Toast.LENGTH_SHORT).show();
 	}
 	
+	/**
+	 * Update contribution values
+	 *  
+	 * @author ipuris
+	 */
 	private void updateContribution() {
-		Log.i("MainActivity", "updateContribution()");
 		
 		SharedPreferences settings = getSharedPreferences(Constants.PREFS, 0);
 		
@@ -182,4 +196,13 @@ public class MainActivity extends Activity {
 		tvContribution.setText(getResources().getString(R.string.main_textview_contribution) + "   " + currentContribution + " / " + totalContribution + " (" + String.format("%.2f", ratio) + "%)");
 	}
 	
+	private BroadcastReceiver mUploadCompleteReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			updateContribution();
+			
+		}
+		
+	};
 }

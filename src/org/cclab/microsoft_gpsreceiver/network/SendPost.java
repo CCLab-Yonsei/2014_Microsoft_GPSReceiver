@@ -13,12 +13,12 @@ import java.net.URL;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class SendPost extends AsyncTask<String, Void, String> {
+public class SendPost extends AsyncTask<String, Void, Integer> {
 
 	private final String urlServer = "http://165.132.120.151/GPS.aspx";
 
 	@Override
-	protected String doInBackground(String... params) {
+	protected Integer doInBackground(String... params) {
 		
 		HttpURLConnection connection = null;
 		DataOutputStream outputStream = null;
@@ -99,11 +99,11 @@ public class SendPost extends AsyncTask<String, Void, String> {
 			e.printStackTrace();
 		}
 		
-		return responseCode + "";
+		return responseCode;
 	}
 
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(Integer result) {
 		// tasks to be executed after everything is done
 	}
 
