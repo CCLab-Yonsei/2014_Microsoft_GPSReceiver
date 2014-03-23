@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <!--
 	<EditText
 	    android:id="@+id/edittext_title"
 	    android:layout_width="match_parent"
@@ -11,7 +12,7 @@
 	    android:lines="5"
 	    android:hint="제목"
 	    />
-	
+	  -->
 	<EditText
 	    android:id="@+id/edittext_nickname"
 	    android:layout_width="match_parent"
@@ -19,13 +20,6 @@
 	    android:hint="닉네임"
 	    />
 	
-	<EditText
-	    android:id="@+id/edittext_content"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:lines="10"
-	    android:hint="내용을 입력해주세요"
-	    />
 	
 	<CheckBox
 	    android:id="@+id/checkbox_addnotice"
@@ -33,6 +27,15 @@
 	    android:layout_height="wrap_content"
 	    android:visibility="invisible"
 	    android:text="공지 등록" />
+	
+	<EditText
+	    android:id="@+id/edittext_content"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    
+	    android:hint="내용을 입력해주세요"
+	    />
+	
 	
 	<Button
 	    android:id="@+id/button_send"

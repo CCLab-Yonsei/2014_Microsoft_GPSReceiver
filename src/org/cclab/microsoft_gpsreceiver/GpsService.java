@@ -22,6 +22,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class GpsService extends Service {
 
 	private ArrayList<GpsData> dataset;
 	private GpsStatus.NmeaListener nmeaListener;
+	
 	
 	@Override
 	public void onCreate() {
@@ -199,11 +201,15 @@ public class GpsService extends Service {
 		@Override
 		public void onProviderEnabled(String provider) {
 			// TODO Auto-generated method stub
+			Log.i("Gps Service", "onProviderEnabled()");
+			
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
 			// TODO Auto-generated method stub
+			Log.i("Gps Service", "onProviderDisabled()");
+			
 		}
 
 	}

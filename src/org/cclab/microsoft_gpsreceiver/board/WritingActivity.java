@@ -19,6 +19,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -39,6 +41,7 @@ public class WritingActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	
 		setContentView(R.layout.activity_writing);
 
 		Intent intent = getIntent();
@@ -49,7 +52,7 @@ public class WritingActivity extends Activity {
 		}
 		
 		// Initialize Components
-		et_title = (EditText)findViewById(R.id.edittext_title);
+		// et_title = (EditText)findViewById(R.id.edittext_title);
 		et_nickname = (EditText)findViewById(R.id.edittext_nickname);
 		et_content = (EditText)findViewById(R.id.edittext_content);
 		cb_addnotice = (CheckBox)findViewById(R.id.checkbox_addnotice);
@@ -78,7 +81,7 @@ public class WritingActivity extends Activity {
 		int state = 0;
 		
 		String id = Utility.getStudentId(this);
-		String title = et_title.getText().toString();
+		// String title = et_title.getText().toString();
 		String content = et_content.getText().toString();
 		String nickname = et_nickname.getText().toString();
 		String kind;
@@ -89,18 +92,19 @@ public class WritingActivity extends Activity {
 			kind = "3";
 		}
 		
-		if(title.length() == 0)
-			title = "제목 없음";
+		// if(title.length() == 0)
+		//	title = "제목 없음";
 		if(content.length() == 0)
 			state = -1; 
 		if(nickname.length() == 0)
 			state = -2;
 		
 		if(state == 0) {
-			new SendPostTask().execute(id, title, content, kind, nickname);
+			new SendPostTask().execute(id, content, kind, nickname);
 		}
 		else Toast.makeText(this, "닉네임과 글내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
 	
+		Log.i("Wrting Activity", kind);
 	}
 	
 	private class SendPostTask extends AsyncTask<String, Void, Integer> {
@@ -139,10 +143,9 @@ public class WritingActivity extends Activity {
 				// Send to Server
 				StringBuffer buffer = new StringBuffer();
 				buffer.append("wid").append("=").append(params[0]).append("&");
-				buffer.append("title").append("=").append(params[1]).append("&");
-				buffer.append("content").append("=").append(params[2]).append("&");
-				buffer.append("kind").append("=").append(params[3]).append("&");
-				buffer.append("nickname").append("=").append(params[4]);
+				buffer.append("content").append("=").append(params[1]).append("&");
+				buffer.append("kind").append("=").append(params[2]).append("&");
+				buffer.append("nickname").append("=").append(params[3]);
 				
 				String str = buffer.toString();
 				OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "utf-8");
@@ -152,6 +155,8 @@ public class WritingActivity extends Activity {
 		
 				
 				// Receive from Server
+				http.getInputStream();
+				/*
 				InputStreamReader tmp = new InputStreamReader(http.getInputStream(), "utf-8");
 				BufferedReader reader = new BufferedReader(tmp);
 				StringBuilder builder = new StringBuilder();
@@ -161,7 +166,7 @@ public class WritingActivity extends Activity {
 				}
 				
 				Log.i("Writing Activity", "DEBUG: " + builder.toString());
-				
+				*/
 				http.disconnect();
 				
 				
