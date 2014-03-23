@@ -13,6 +13,9 @@
     <!-- MainActivity -->
     <string name="main_button_logging_start">기록 시작하기</string>
     <string name="main_button_logging_stop">기록 멈추기</string>
+    <string name="main_button_board">게시판</string>
+    <string name="main_button_rank">랭킹</string>
+    <string name="main_button_about">정보</string>
     <string name="main_textview_thanks">Thanks for your contribution</string>
     <string name="main_textview_loggingstatus_on">현재 GPS 기록 중입니다.</string>
     <string name="main_textview_loggingstatus_off">현재 GPS 기록 중이 아닙니다.</string>
@@ -29,6 +32,12 @@
     <!-- Widget -->
     <string name="widget_on">기록 중</string>
     <string name="widget_off">켜기</string>
+    
+    <!-- Rank -->
+    <string name="rank_activity_title">RankActivity</string>
+    
+    <!-- About -->
+    <string name="about_activity_title">AboutActivity</string>
     
     <!-- Registration -->
     <string name="registration_activity_title">RegistrationActivity</string>

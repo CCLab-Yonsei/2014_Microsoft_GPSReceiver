@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:layout_alignParentTop="true" >
-	    
+
         <ImageView
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
@@ -23,80 +23,81 @@
 	        android:scaleType="centerCrop"
 	        android:src="@drawable/sky"
 	        android:contentDescription="@string/main_contentsdescription_mainimage" />
-        
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
             android:layout_gravity="center_horizontal"
-            android:padding="20dp"
-            android:orientation="vertical"
-            android:background="#000000"
-            android:alpha="0.5"
-            android:gravity="center"
-            android:onClick="onThanksTouchListener" >
-        
-            <TextView
-		        android:id="@+id/mainactivity_textview_thankyou"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:gravity="center_horizontal"
-		        android:alpha="1.0"
-		        android:text="@string/main_textview_thanks"
-		        android:textAppearance="?android:attr/textAppearanceLarge"
-		        android:textColor="#FFFFFF"
-		        android:textSize="20sp"
-		        android:fontFamily="sans-serif-light" />
-            
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="left">
-                
+            android:layout_marginTop="120dp"
+            android:orientation="horizontal"
+            android:background="@drawable/clickflash"
+            android:onClick="onThanksClickListener" >
+
+	        <LinearLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:padding="20dp"
+	            android:orientation="vertical"
+	            android:gravity="center"
+	            android:alpha="0.5"
+	            android:background="#000000" >
+
 	            <TextView
-			        android:id="@+id/mainactivity_textview_studentid"
-			        android:layout_width="match_parent"
+			        android:id="@+id/mainactivity_textview_thankyou"
+			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:layout_marginTop="10dp"
+			        android:gravity="center_horizontal"
 			        android:alpha="1.0"
-			        android:text=""
+			        android:text="@string/main_textview_thanks"
+			        android:textAppearance="?android:attr/textAppearanceLarge"
 			        android:textColor="#FFFFFF"
-			        android:textSize="13sp"
+			        android:textSize="20sp"
 			        android:fontFamily="sans-serif-light" />
-	            
-	            <TextView
-			        android:id="@+id/mainactivity_textview_contribution"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:alpha="1.0"
-			        android:text=""
-			        android:textColor="#FFFFFF"
-			        android:textSize="13sp"
-			        android:fontFamily="sans-serif-light" />
-                
-            </LinearLayout>
-            
+
+	            <LinearLayout
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:orientation="vertical"
+	                android:gravity="left">
+
+		            <TextView
+				        android:id="@+id/mainactivity_textview_studentid"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginTop="10dp"
+				        android:alpha="1.0"
+				        android:text=""
+				        android:textColor="#FFFFFF"
+				        android:textSize="13sp"
+				        android:fontFamily="sans-serif-light" />
+
+		            <TextView
+				        android:id="@+id/mainactivity_textview_contribution"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:alpha="1.0"
+				        android:text=""
+				        android:textColor="#FFFFFF"
+				        android:textSize="13sp"
+				        android:fontFamily="sans-serif-light" />
+
+	            </LinearLayout>
+
+	        </LinearLayout>
+
         </LinearLayout>
-	    
+
     </FrameLayout>
-    
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/goto_board"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GO BOARD!!!!!!"
-            android:onClick="onBoardListener" />
-         
 	    <ToggleButton
 	        android:id="@+id/mainactivity_togglebutton_startstop"
 	        android:layout_width="wrap_content"
@@ -111,6 +112,59 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="15dp"
 	        android:text="@string/main_textview_loggingstatus_off" />
+	    
+		<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:background="#000000"
+            android:alpha="0.9" >
+
+	        <Button
+	            android:id="@+id/mainactivity_button_rank"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:paddingLeft="20dp"
+	            android:paddingRight="20dp"
+	            android:drawableTop="@drawable/ic_action_chat"
+	            android:onClick="onRankClickListener"
+	            android:background="@null"
+	            android:text="@string/main_button_rank"
+	            android:textColor="#ffffff"
+	            android:textSize="13sp"
+	            android:fontFamily="sans-serif-light" />
+
+	        <Button
+	            android:id="@+id/mainactivity_button_board"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_toLeftOf="@id/mainactivity_button_rank"
+	            android:drawableTop="@drawable/ic_action_view_as_list"
+	            android:onClick="onBoardClickListener"
+	            android:background="@null"
+	            android:text="@string/main_button_board"
+	            android:textColor="#ffffff"
+	            android:textSize="13sp"
+	            android:fontFamily="sans-serif-light" />
+
+	        <Button
+	            android:id="@+id/mainactivity_button_about"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_toRightOf="@id/mainactivity_button_rank"
+	            android:drawableTop="@drawable/ic_action_about"
+	            android:onClick="onAboutClickListener"
+	            android:background="@null"
+	            android:text="@string/main_button_about"
+	            android:textColor="#ffffff"
+	            android:textSize="13sp"
+	            android:fontFamily="sans-serif-light" />
+
+        </RelativeLayout>
 	    
     </LinearLayout>
 

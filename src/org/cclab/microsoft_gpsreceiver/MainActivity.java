@@ -138,17 +138,37 @@ public class MainActivity extends Activity {
 	 * 
 	 * @param v
 	 */
-	public void onBoardListener(View v) {
+	public void onBoardClickListener(View v) {
 		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.board.BoardActivity.class);
 		startActivity(intent);
 	}
 	
 	/**
+	 * Board button onClick listener
+	 * 
+	 * @param v
+	 */
+	public void onRankClickListener(View v) {
+		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.RankActivity.class);
+		startActivity(intent);
+	}
+
+	/**
+	 * Board button onClick listener
+	 * 
+	 * @param v
+	 */
+	public void onAboutClickListener(View v) {
+		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.AboutActivity.class);
+		startActivity(intent);
+	}
+
+	/**
 	 * 
 	 * 
 	 * @param v
 	 */
-	public void onThanksTouchListener(View v) {
+	public void onThanksClickListener(View v) {
 		updateContribution();
 		
 		Toast.makeText(this, getResources().getString(R.string.main_toast_update_contribution), Toast.LENGTH_SHORT).show();

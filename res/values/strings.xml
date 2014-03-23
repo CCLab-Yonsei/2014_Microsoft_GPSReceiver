@@ -13,6 +13,9 @@
     <!-- MainActivity -->
     <string name="main_button_logging_start">Start logging</string>
     <string name="main_button_logging_stop">Stop logging</string>
+    <string name="main_button_board">Board</string>
+    <string name="main_button_rank">Rank</string>
+    <string name="main_button_about">About</string>
     <string name="main_textview_thanks">Thanks for your contribution</string>
     <string name="main_textview_loggingstatus_on">Now logging</string>
     <string name="main_textview_loggingstatus_off">NOT logging</string>
@@ -29,6 +32,12 @@
     <!-- Widget -->
     <string name="widget_on">On Logging</string>
     <string name="widget_off">Start Logging</string>
+    
+    <!-- Rank -->
+    <string name="rank_activity_title">RankActivity</string>
+    
+    <!-- About -->
+    <string name="about_activity_title">AboutActivity</string>
     
     <!-- Registration -->
     <string name="registration_activity_title">RegistrationActivity</string>
