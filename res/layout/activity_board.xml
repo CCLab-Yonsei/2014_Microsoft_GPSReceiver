@@ -16,7 +16,7 @@
 <!--     The PullToRefreshListView replaces a standard ListView widget. -->
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/pull_refresh_list"
+        android:id="@+id/pull_refresh_list_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="#00000000"
