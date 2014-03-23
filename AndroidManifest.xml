@@ -42,13 +42,23 @@
         </activity>
 
         <activity
-            android:name="org.cclab.microsoft_gpsreceiver.board.BoardActivity"
-            android:label="@string/board_activity_title" >
+            android:name="org.cclab.microsoft_gpsreceiver.RegistrationActivity"
+            android:label="@string/registration_activity_title" >
         </activity>
         
         <activity
-            android:name="org.cclab.microsoft_gpsreceiver.RegistrationActivity"
-            android:label="@string/registration_activity_title" >
+            android:name="org.cclab.microsoft_gpsreceiver.RankActivity"
+            android:label="@string/rank_activity_title" >
+        </activity>
+        
+        <activity
+            android:name="org.cclab.microsoft_gpsreceiver.AboutActivity"
+            android:label="@string/about_activity_title" >
+        </activity>
+        
+        <activity
+            android:name="org.cclab.microsoft_gpsreceiver.board.BoardActivity"
+            android:label="@string/board_activity_title" >
         </activity>
         
         <activity 
