@@ -23,9 +23,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class WriteActivity extends Activity {
+public class WritingActivity extends Activity {
 
 	EditText et_title;
+	EditText et_nickname;
 	EditText et_content;
 
 	// Only visible 'write' mode
@@ -38,7 +39,7 @@ public class WriteActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_write);
+		setContentView(R.layout.activity_writing);
 
 		Intent intent = getIntent();
 		mode = intent.getIntExtra("MODE", -1);
@@ -49,6 +50,7 @@ public class WriteActivity extends Activity {
 		
 		// Initialize Components
 		et_title = (EditText)findViewById(R.id.edittext_title);
+		et_nickname = (EditText)findViewById(R.id.edittext_nickname);
 		et_content = (EditText)findViewById(R.id.edittext_content);
 		cb_addnotice = (CheckBox)findViewById(R.id.checkbox_addnotice);
 		
@@ -60,9 +62,9 @@ public class WriteActivity extends Activity {
 	private void init() {
 		
 		if(mode == BoardParams.MODE_WRITE) {
-			et_title.setText("");
-			et_content.setText("");
-			cb_addnotice.setVisibility(View.VISIBLE);
+			
+			if(Utility.isAdmin(this))
+				cb_addnotice.setVisibility(View.VISIBLE);
 		}
 		
 		else if(mode == BoardParams.MODE_MODIFY) {
@@ -73,15 +75,31 @@ public class WriteActivity extends Activity {
 	
 	public void onSend(View v) {
 		
+		int state = 0;
+		
 		String id = Utility.getStudentId(this);
 		String title = et_title.getText().toString();
 		String content = et_content.getText().toString();
-		String kind = String.valueOf( cb_addnotice.isChecked() ? 1 : 3 );
+		String nickname = et_nickname.getText().toString();
+		String kind;
+		
+		if(Utility.isAdmin(this)) 
+			kind = String.valueOf( cb_addnotice.isChecked() ? 1 : 3 );
+		else {
+			kind = "3";
+		}
 		
 		if(title.length() == 0)
 			title = "제목 없음";
+		if(content.length() == 0)
+			state = -1; 
+		if(nickname.length() == 0)
+			state = -2;
 		
-		new SendPostTask().execute(id, title, content, kind);
+		if(state == 0) {
+			new SendPostTask().execute(id, title, content, kind, nickname);
+		}
+		else Toast.makeText(this, "닉네임과 글내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
 	
 	}
 	
@@ -90,7 +108,7 @@ public class WriteActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			
-			dialog = new ProgressDialog(WriteActivity.this);
+			dialog = new ProgressDialog(WritingActivity.this);
 			dialog.setTitle("잠시만 기다려주세요");
 			dialog.setMessage("잠깐 기다리라고..");
 			dialog.setIndeterminate(true);
@@ -102,12 +120,7 @@ public class WriteActivity extends Activity {
 		@Override
 		protected Integer doInBackground(String... params) {
 			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
 			
 			try {
 				
@@ -125,10 +138,11 @@ public class WriteActivity extends Activity {
 				
 				// Send to Server
 				StringBuffer buffer = new StringBuffer();
-				buffer.append("writer").append("=").append(params[0]).append("&");
+				buffer.append("wid").append("=").append(params[0]).append("&");
 				buffer.append("title").append("=").append(params[1]).append("&");
 				buffer.append("content").append("=").append(params[2]).append("&");
-				buffer.append("kind").append("=").append(params[3]);
+				buffer.append("kind").append("=").append(params[3]).append("&");
+				buffer.append("nickname").append("=").append(params[4]);
 				
 				String str = buffer.toString();
 				OutputStreamWriter outStream = new OutputStreamWriter(http.getOutputStream(), "utf-8");
@@ -146,6 +160,8 @@ public class WriteActivity extends Activity {
 					builder.append(str + "\n");
 				}
 				
+				Log.i("Writing Activity", "DEBUG: " + builder.toString());
+				
 				http.disconnect();
 				
 				
@@ -154,6 +170,7 @@ public class WriteActivity extends Activity {
 				return -2;
 			}				
 			catch(IOException e) {
+				Log.i("Writing Activity", e.toString());
 				return -1;
 			}
 			
@@ -167,14 +184,14 @@ public class WriteActivity extends Activity {
 			dialog.dismiss();
 			
 			if(param == 0) {
-				Toast.makeText(WriteActivity.this, "글 작성이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(WritingActivity.this, "글 작성이 완료되었습니다.", Toast.LENGTH_SHORT).show();
 				finish();
 			}
 			else if(param == -1) {
-				Toast.makeText(WriteActivity.this, "네트워크 상태가 좋지 않습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(WritingActivity.this, "네트워크 상태가 좋지 않습니다.", Toast.LENGTH_SHORT).show();
 			}
 			else if(param == -2) {
-				Toast.makeText(WriteActivity.this, "서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
+				Toast.makeText(WritingActivity.this, "서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
 			}
 			
 			super.onPostExecute(param);

@@ -21,23 +21,24 @@ import org.xml.sax.InputSource;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public class BoardActivity extends ListActivity {
+public class BoardActivity extends ListActivity implements OnRefreshListener<ListView>, OnItemClickListener {
 
 	private static final String TAG = "Board Activity";
 	
@@ -47,12 +48,11 @@ public class BoardActivity extends ListActivity {
 	
 	private ArrayList<Board> boardList;
 	
-	// For First Load
-	ProgressDialog progress;
-	boolean firstLoad = true;
 	
-	// For Load more
-	View footer;
+	// Loaing progress dialog
+	ProgressDialog progress;
+	boolean bFirstLoading = true;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,34 +63,24 @@ public class BoardActivity extends ListActivity {
 		listView = ptrListView.getRefreshableView();
 		
 		// Set listeners
-		ptrListView.setOnRefreshListener(refreshListener);
-		ptrListView.setOnLastItemVisibleListener(lastListener);
+		ptrListView.setOnRefreshListener(this);
+		listView.setOnItemClickListener(this);
+		// ptrListView.setOnLastItemVisibleListener(lastListener);
 		
-		boardList = new ArrayList<Board>();
-		// Set example data to lists
-		// addExampleBorads();
-		
+		boardList = new ArrayList<Board>();	
 		adapter = new BoardAdapter(this, R.layout.listview_board_row, boardList);
 		ptrListView.setAdapter(adapter);
 		
-		// Set footer
-		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		footer = inflater.inflate(R.layout.listview_board_footer, null, false);
-		listView.addFooterView(footer);
-		footer.setVisibility(View.GONE);
+		registerForContextMenu(listView);
 		
-		// First Refresh
-		new RefreshTaskOnCreate().execute();
-		firstLoad = false;
 	}
 
 	@Override
-	protected void onRestart() {
+	protected void onStart() {
 		// TODO Auto-generated method stub
-		super.onRestart();
-		
-		if(firstLoad == false)
-			ptrListView.setRefreshing();
+		setRefreshing();
+		super.onStart();
+
 
 	}
 	
@@ -102,46 +92,60 @@ public class BoardActivity extends ListActivity {
 		return true;
 	}
 	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.setHeaderTitle("Context Menu");
+		menu.add(0, 0, Menu.NONE, "수정");
+		menu.add(0, 1, Menu.NONE, "삭제");
+	}
+	
 	
 	// ============================================================
-	// Listeners for Listview
+	// Listeners method
 	// ============================================================
-	
-	OnRefreshListener<ListView> refreshListener = new OnRefreshListener<ListView>() {
-
-		@Override
-		public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-			// TODO Auto-generated method stub
-			Log.i("BoardACtivity", "OnRefreshListener");
-			boardList.clear();
-			new RefreshTask().execute();
-		}
+	@Override
+	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+		// TODO Auto-generated method stub
 		
-	};
-	OnLastItemVisibleListener lastListener = new OnLastItemVisibleListener() {
-
-		@Override
-		public void onLastItemVisible() {
-			// TODO Auto-generated method stub
-			new LoadmoreTask().execute();
-		}
+		new RefreshTask().execute();
+	}
+	public void onWrite(View v) {
+		Intent intent = new Intent(BoardActivity.this, WritingActivity.class);
+		intent.putExtra("MODE", BoardParams.MODE_WRITE);	// MODE_WRITE
+		startActivity(intent);
 		
-	};
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(BoardActivity.this, ReadingActivity.class);
+		
+		intent.putExtra("board", boardList.get(position-1));
+		intent.putExtra("writer", boardList.get(position-1).writer);
+		startActivity(intent);
+	}
+
 
 	// ============================================================
 	// Communicate Tasks
 	// ============================================================
 	private class RefreshTaskOnCreate extends AsyncTask<Void, Void, Integer> {
 		
+		ArrayList<Items.Board> temp;
+		
 		@Override
 		protected void onPreExecute() {
-			if(firstLoad) {
-				progress = new ProgressDialog(BoardActivity.this);
-				progress.setTitle("");
-				progress.setMessage("로딩중...");
-				progress.show();
+			
+			temp = new ArrayList<Items.Board>();
+			
+			progress = new ProgressDialog(BoardActivity.this);
+			progress.setTitle("");
+			progress.setMessage("로딩중...");
+			progress.show();
 				
-			}
+			
 			super.onPreExecute();
 		}
 		
@@ -149,12 +153,18 @@ public class BoardActivity extends ListActivity {
 		protected Integer doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			
-			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
-					getLastBoardNo() );
+			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
+			//		getLastBoardNo() );
+			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=0", temp);
 		}
 		
 		@Override
 		protected void onPostExecute(Integer param) {
+			boardList.clear();
+			
+			for(int i=0; i<temp.size(); i++)
+				boardList.add(temp.get(i));
+			
 			adapter.notifyDataSetChanged();
 			progress.dismiss();
 			
@@ -164,17 +174,30 @@ public class BoardActivity extends ListActivity {
 		}
 	}	
 	private class RefreshTask extends AsyncTask<Void, Void, Integer> {
-
+		
+		ArrayList<Items.Board> temp;
+		
+		@Override
+		protected void onPreExecute() {
+			temp = new ArrayList<Items.Board>();
+			super.onPreExecute();
+		}
 		@Override
 		protected Integer doInBackground(Void... params) {
 			// TODO Auto-generated method stub
-			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last="+
-					getLastBoardNo() );
+			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last="+
+			//		getLastBoardNo() );
+			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=0", temp);
 			
 		}
 		
 		@Override
 		protected void onPostExecute(Integer param) {
+			boardList.clear();
+			
+			for(int i=0; i<temp.size(); i++)
+				boardList.add(temp.get(i));
+			
 			adapter.notifyDataSetChanged();
 			ptrListView.onRefreshComplete();
 			
@@ -184,47 +207,12 @@ public class BoardActivity extends ListActivity {
 		}
 	
 	}
-	private class LoadmoreTask extends AsyncTask<Void, Void, Integer> {
+	
 
-		@Override
-		protected void onPreExecute() {
-			footer.setVisibility(View.VISIBLE);
-			super.onPreExecute();
-		}
-		
-		@Override
-		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=lm&last="+
-					getLastBoardNo());
-			
-			
-		}
-		
-		@Override
-		protected void onPostExecute(Integer result) {
-			toastErrorMessage(result);
-			footer.setVisibility(View.GONE);
-			super.onPostExecute(result);
-		}
-		
-	}
-	
-	// ============================================================
-	// OnButtonClick
-	// ============================================================
-	public void onWrite(View v) {
-		Intent intent = new Intent(BoardActivity.this, WriteActivity.class);
-		intent.putExtra("MODE", BoardParams.MODE_WRITE);	// MODE_WRITE
-		startActivity(intent);
-		
-	}
-	
-	
 	// ============================================================
 	// Other Work
 	// ============================================================
-	private int getBoardListFromServer(String address) {
+	private int getBoardListFromServer(String address, ArrayList<Items.Board> temp) {
 		
 		URL url = null;
 		try {
@@ -268,7 +256,8 @@ public class BoardActivity extends ListActivity {
 							if(tagName.equals("writer")) {
 								writer.sex = Integer.parseInt(eleIn.getAttribute("sex")) == 1 ? "남자" : "여자";
 								writer.name = eleIn.getAttribute("name");
-								writer.id = eleIn.getFirstChild().getTextContent();
+								writer.id = eleIn.getAttribute("wid");
+								writer.nickname = eleIn.getFirstChild().getTextContent();
 								writer.hashedId = Utility.getHashedValue(BoardActivity.this, writer.id);
 							}
 							else if(tagName.equals("title"))
@@ -280,7 +269,7 @@ public class BoardActivity extends ListActivity {
 					} // inner for statement : _aitem
 					
 					board.writer = writer;
-					boardList.add(board);
+					temp.add(board);
 					
 				}
 				
@@ -312,16 +301,19 @@ public class BoardActivity extends ListActivity {
 			Toast.makeText(BoardActivity.this, "Exception 알 수 없는 오류.",  Toast.LENGTH_SHORT).show();
 		}
 	}
-	private int getLastBoardNo() {
-		
-		int no = 0;
-		int size = boardList.size();
-		if(size != 0) {
-			no = boardList.get(size-1).no;
-		}
-		
-		return no;
+	private void setFirstRefreshing() {
+		new RefreshTaskOnCreate().execute();
+		bFirstLoading = false;
 	}
+	private void setRefreshing() {
+		if(bFirstLoading) {
+			setFirstRefreshing();
+		}
+		else {
+			ptrListView.setRefreshing();
+		}
+	}
+	
 
 }
 
