@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	public void onRankClickListener(View v) {
-		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.RankActivity.class);
+		Intent intent = new Intent(MainActivity.this, org.cclab.microsoft_gpsreceiver.rank.RankActivity.class);
 		startActivity(intent);
 	}
 

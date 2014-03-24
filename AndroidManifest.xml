@@ -47,7 +47,7 @@
         </activity>
         
         <activity
-            android:name="org.cclab.microsoft_gpsreceiver.RankActivity"
+            android:name="org.cclab.microsoft_gpsreceiver.rank.RankActivity"
             android:label="@string/rank_activity_title" >
         </activity>
         
