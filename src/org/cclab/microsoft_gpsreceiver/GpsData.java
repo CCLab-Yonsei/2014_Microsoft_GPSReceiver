@@ -1,5 +1,10 @@
 package org.cclab.microsoft_gpsreceiver;
 
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class GpsData {
 	private double latitude;
 	private double longitude;
@@ -17,7 +22,10 @@ public class GpsData {
 	
 	@Override
 	public String toString() {
-		return latitude + "\t" + longitude + "\t" + timestamp + "\t" + nSatellite + "\t" + hdop + "\n";
+		Date date = new Date(timestamp);
+		Format sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		
+		return latitude + "\t" + longitude + "\t" + sdf.format(date) + "\t" + nSatellite + "\t" + hdop + "\n";
 	}
 
 }
