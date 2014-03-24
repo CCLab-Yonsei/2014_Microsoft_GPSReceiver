@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.cclab.microsoft_gpsreceiver.R;
-import org.cclab.microsoft_gpsreceiver.R.layout;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,9 +19,7 @@ import org.xml.sax.SAXException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class RankActivity extends Activity {
@@ -43,7 +40,6 @@ public class RankActivity extends Activity {
 
 		@Override
 		protected ArrayList<ArrayList<String>> doInBackground(Void... params) {
-			// TODO Auto-generated method stub	
 			
 			ArrayList<ArrayList<String>> RankList = new ArrayList<ArrayList<String>>();
 					
@@ -58,7 +54,7 @@ public class RankActivity extends Activity {
 				
 				mTotal = Integer.parseInt(element.getAttribute("total"));
 				
-				Log.i("rank", "Total Value = " + String.valueOf(mTotal));
+//				Log.i("rank", "Total Value = " + String.valueOf(mTotal));
 								
 				int rank = 0;
 				
@@ -69,34 +65,30 @@ public class RankActivity extends Activity {
 						
 						ArrayList<String> RankRaw = new ArrayList<String>();
 						
-						Log.i("rank", "rank = " + String.valueOf(rank));
-						Log.i("rank", "id = " + ((Element)aitem).getAttribute("id"));
+//						Log.i("rank", "rank = " + String.valueOf(rank));
+//						Log.i("rank", "id = " + ((Element)aitem).getAttribute("id"));
 						
 						
 						RankRaw.add(String.valueOf(rank));
 						RankRaw.add( ((Element)aitem).getAttribute("id") );
 	
 						int gps_cnt = Integer.parseInt(aitem.getFirstChild().getTextContent());
-						Log.i("rank", "gps_cnt = " + String.valueOf(gps_cnt));
+//						Log.i("rank", "gps_cnt = " + String.valueOf(gps_cnt));
 						
 						RankRaw.add(String.valueOf(gps_cnt));
 						RankRaw.add(String.valueOf(gps_cnt/mTotal * 100));
-						Log.i("rank", "percentage = " + String.valueOf(gps_cnt/mTotal * 100));
+//						Log.i("rank", "percentage = " + String.valueOf(gps_cnt/mTotal * 100));
 						RankList.add(RankRaw);			
 					}
 				}
 				
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SAXException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
