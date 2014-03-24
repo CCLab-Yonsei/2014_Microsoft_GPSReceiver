@@ -38,6 +38,16 @@
     
     <!-- About -->
     <string name="about_activity_title">AboutActivity</string>
+    <string name="about_introduction_title">Introduction</string>
+    <string name="about_privacy_title">Privacy</string>
+    <string name="about_network_title">Network</string>
+    <string name="about_battery_title">Battery</string>
+    <string name="about_contact_title">Contact</string>
+    <string name="about_introduction_contents"></string>
+    <string name="about_privacy_contents"></string>
+    <string name="about_network_contents"></string>
+    <string name="about_battery_contents"></string>
+    <string name="about_contact_contents"></string>
     
     <!-- Registration -->
     <string name="registration_activity_title">RegistrationActivity</string>

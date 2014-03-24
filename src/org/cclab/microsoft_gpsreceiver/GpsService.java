@@ -22,6 +22,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -35,6 +36,10 @@ public class GpsService extends Service {
 
 	private ArrayList<GpsData> dataset;
 	private GpsStatus.NmeaListener nmeaListener;
+	
+	private Vibrator vibrator;
+	private long[] vibPattern = {100, 500, 100, 500};
+	private boolean bGpsTurnOff = false;
 	
 	@Override
 	public void onCreate() {
@@ -92,7 +97,8 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
-		dataset.add(new GpsData(1.0, 2.0, 3, 4, 5));
+		// test input
+		// dataset.add(new GpsData(1.0, 2.0, 3, 4, 5));
 		if(dataset.size() > 0) { 
 			// save data to file
 			Calendar cal = Calendar.getInstance();
@@ -199,11 +205,24 @@ public class GpsService extends Service {
 		@Override
 		public void onProviderEnabled(String provider) {
 			// TODO Auto-generated method stub
+			Log.i("Gps Service", "onProviderEnabled()");
+
+			if(bGpsTurnOff) {
+				Toast.makeText(GpsService.this, "감사합니다!", Toast.LENGTH_SHORT).show();
+				bGpsTurnOff = false;
+			}
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
 			// TODO Auto-generated method stub
+			Log.i("Gps Service", "onProviderDisabled()");
+			
+			vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(vibPattern, -1);
+			
+			bGpsTurnOff = true;
+			Toast.makeText(GpsService.this, "기록 중에 GPS를 끄지말아주세요!", Toast.LENGTH_LONG).show();
 		}
 
 	}

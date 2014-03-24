@@ -59,7 +59,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_board);
 		
-		ptrListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
+		ptrListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list_board);
 		listView = ptrListView.getRefreshableView();
 		
 		// Set listeners
@@ -71,7 +71,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		adapter = new BoardAdapter(this, R.layout.listview_board_row, boardList);
 		ptrListView.setAdapter(adapter);
 		
-		registerForContextMenu(listView);
+		// registerForContextMenu(listView);
 		
 	}
 
@@ -82,14 +82,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		super.onStart();
 
 
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.board, menu);
-				
-		return true;
 	}
 	
 	@Override
@@ -120,7 +112,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(BoardActivity.this, ReadingActivity.class);
+		Intent intent = new Intent(BoardActivity.this, CommentActivity.class);
 		
 		intent.putExtra("board", boardList.get(position-1));
 		intent.putExtra("writer", boardList.get(position-1).writer);
@@ -260,8 +252,10 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 								writer.nickname = eleIn.getFirstChild().getTextContent();
 								writer.hashedId = Utility.getHashedValue(BoardActivity.this, writer.id);
 							}
+							/*
 							else if(tagName.equals("title"))
 								board.title = eleIn.getFirstChild().getTextContent();
+								*/
 							else if(tagName.equals("content"))
 								board.content = eleIn.getFirstChild().getTextContent();
 							

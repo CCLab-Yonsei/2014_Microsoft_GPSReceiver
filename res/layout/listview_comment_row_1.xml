@@ -4,11 +4,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <TextView
-        android:id="@+id/textview_row1_title"
-        android:layout_width="match_parent"
+	 <TextView
+        android:id="@+id/textview_cwriter1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-        
-
+    <!-- 
+    <TextView
+        android:id="@+id/textview_btitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+     -->
+    <TextView
+        android:id="@+id/textview_ccontent1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/textview_cdate1"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	/>
+    
+    
+    <TextView
+        android:id="@+id/textview_ccomments_num1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

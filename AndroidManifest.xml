@@ -8,6 +8,7 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -62,12 +63,12 @@
         </activity>
         
         <activity 
-            android:name="org.cclab.microsoft_gpsreceiver.board.WritingActivity"
-            >
+            android:name="org.cclab.microsoft_gpsreceiver.board.WritingActivity" >
         </activity>
         
         <activity
-            android:name="org.cclab.microsoft_gpsreceiver.board.ReadingActivity" >
+            android:name="org.cclab.microsoft_gpsreceiver.board.CommentActivity"
+             >
         </activity>
         
         <service

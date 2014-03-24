@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
+		Log.i("Main Activity", "onResume()");
 		// if GpsService is already running, turn on the toggle button 
 		final boolean serviceRunning = Utility.isServiceRunning(getApplicationContext(), GpsService.class.getName());
 		if(serviceRunning) {
@@ -95,7 +96,7 @@ public class MainActivity extends Activity {
 		
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+		if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && buttonStartstop.isChecked()) {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String question = getResources().getString(R.string.main_alert_enable_gps_question); 
 			final String yes = getResources().getString(R.string.main_alert_enable_gps_yes);

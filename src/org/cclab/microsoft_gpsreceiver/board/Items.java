@@ -24,8 +24,7 @@ public class Items {
 		
 		int no;
 		
-		String title;
-		
+		// String title;
 		
 		int kind;
 		int commentNum;
@@ -36,15 +35,14 @@ public class Items {
 			
 		}
 		
-		public Board(String title, String content, Person writer) {
-			this.title = title;
+		public Board(String content, Person writer) {
+			// this.title = title;
 			this.content = content;
 			this.writer = writer;
 		}
 		
-		public Board(int no, String title, String content, int kind, String date) {
+		public Board(int no, String content, int kind, String date) {
 			this.no = no;
-			this.title = title;
 			this.content = content;
 			this.kind = kind;
 			this.date = date;
@@ -60,7 +58,7 @@ public class Items {
 		public void writeToParcel(Parcel dest, int flags) {
 			// TODO Auto-generated method stub
 			dest.writeInt(no);
-			dest.writeString(title);
+			
 			dest.writeString(content);
 			dest.writeInt(kind);
 			dest.writeString(date);
@@ -74,13 +72,12 @@ public class Items {
 			public Board createFromParcel(Parcel source) {
 				// TODO Auto-generated method stub
 				int no = source.readInt();
-				String title = source.readString();
 				String content = source.readString();
 				int kind = source.readInt();
 				String date = source.readString();
 				
 				
-				return new Board(no, title, content, kind, date);
+				return new Board(no, content, kind, date);
 			}
 
 			@Override
