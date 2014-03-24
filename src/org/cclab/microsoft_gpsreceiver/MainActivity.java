@@ -194,6 +194,8 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		// update 

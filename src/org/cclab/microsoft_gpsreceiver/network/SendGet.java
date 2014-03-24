@@ -33,6 +33,8 @@ public class SendGet extends AsyncTask<String, Void, String> {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return null;
