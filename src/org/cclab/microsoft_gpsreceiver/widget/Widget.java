@@ -13,11 +13,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 
 public class Widget extends AppWidgetProvider {
+	
+	private static final String TAG = "MS Widget";
 	
 	@Override
 	public void onEnabled(Context context) {
@@ -28,6 +31,7 @@ public class Widget extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		
+		Log.i(TAG, "onUpdate()");
 		for(int i=0; i < appWidgetIds.length; i++) {
 			int appWidgetId = appWidgetIds[i];
 			
@@ -61,12 +65,14 @@ public class Widget extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		
+		Log.i(TAG, "onReceive()" + intent.getAction());
 		RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		ComponentName watchWidget = new ComponentName(context, Widget.class);
 		
 		// check if GPS logging service is running 
 		boolean isServiceRunning = Utility.isServiceRunning(context, GpsService.class.getName());
 		if(intent.getAction().equals(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK)) {
+			
 			
 			// check whether GPS is enabled or not
 			final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);

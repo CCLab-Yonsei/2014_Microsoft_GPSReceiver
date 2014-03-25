@@ -84,14 +84,16 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 		Board item = items.get(position);
 		
 		if(item.kind == 1) {
-			convertView.setBackgroundColor(Color.rgb(200, 200, 200));
+			convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
 		}
 		else convertView.setBackgroundColor(Color.WHITE);
 		
-		if(bAdmin)
-			holder.tv_writer.setText( item.writer.nickname + "(" + item.writer.id + ")" );
-		else
-			holder.tv_writer.setText( item.writer.nickname + "(" + item.writer.hashedId.substring(0, 9) + ")" );
+//		if(bAdmin)
+//			holder.tv_writer.setText( item.writer.nickname + "(" + item.writer.id + ")" );
+//		else
+//			holder.tv_writer.setText( item.writer.nickname + "(" + item.writer.hashedId.substring(0, 9) + ")" );
+//		
+		holder.tv_writer.setText( item.writer.nickname + " (" + item.writer.hashedId.substring(0, 9) + ")" );
 		
 		// holder.tv_title.setText( item.title + "(" + item.commentNum + ")" );
 		holder.tv_content.setText( item.content );

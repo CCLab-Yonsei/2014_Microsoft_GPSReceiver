@@ -56,7 +56,6 @@
     
     <!-- BoardActivity -->
     <string name="board_activity_title">BoardActivity</string>
-    <string name="board_settings">Settings</string>
-    <string name="board_hello_world">Hello world!</string>
+    <string name="board_list_comment">댓글</string>
     
 </resources>

@@ -29,16 +29,20 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public class BoardActivity extends ListActivity implements OnRefreshListener<ListView>, OnItemClickListener {
+public class BoardActivity extends ListActivity implements OnRefreshListener<ListView>, OnItemClickListener, OnScrollListener {
 
 	private static final String TAG = "Board Activity";
 	
@@ -48,10 +52,21 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	
 	private ArrayList<Board> boardList;
 	
-	
-	// Loaing progress dialog
+	// Loading progress dialog
 	ProgressDialog progress;
 	boolean bFirstLoading = true;
+	
+	/////////////////////////////////
+	// Variable for Loadmore
+	////////////////////////////////
+	
+	// footer view
+	private RelativeLayout mFooterView;
+	// private TextView mLabLoadMore;
+	private ProgressBar mProgressBarLoadMore;
+	// To know if the list is loading more items
+	private boolean mIsLoadingMore = false;
+	private int mCurrentScrollState;
 	
 	
 	@Override
@@ -82,14 +97,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		super.onStart();
 
 
-	}
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("Context Menu");
-		menu.add(0, 0, Menu.NONE, "수정");
-		menu.add(0, 1, Menu.NONE, "삭제");
 	}
 	
 	
@@ -307,7 +314,53 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			ptrListView.setRefreshing();
 		}
 	}
+
 	
+	
+
+	// ============================================================
+	// Implement Loadmore
+	// ============================================================
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		//bug fix: listview was not clickable after scroll
+		if ( scrollState == OnScrollListener.SCROLL_STATE_IDLE )
+    	{
+      		view.invalidateViews();
+    	}
+		        	
+		mCurrentScrollState = scrollState;
+
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+
+		if (visibleItemCount == totalItemCount) {
+			mProgressBarLoadMore.setVisibility(View.GONE);
+			// mLabLoadMore.setVisibility(View.GONE);
+			return;
+		}
+
+		boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+
+		if (!mIsLoadingMore && loadMore
+				&& mCurrentScrollState != SCROLL_STATE_IDLE) {
+			mProgressBarLoadMore.setVisibility(View.VISIBLE);
+			// mLabLoadMore.setVisibility(View.VISIBLE);
+			mIsLoadingMore = true;
+			onLoadMore();
+		}
+
+	}
+	
+	private void onLoadMore() {
+		
+	}
 
 }
 

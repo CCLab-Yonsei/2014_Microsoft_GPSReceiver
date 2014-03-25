@@ -28,6 +28,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		Log.i("Main Activity", "Test Log");
+		
 		// initialize member variables
 		buttonStartstop = (ToggleButton)findViewById(R.id.mainactivity_togglebutton_startstop);
 		tvGpsStatus = (TextView)findViewById(R.id.mainactivity_textview_gpsstatus);
@@ -195,7 +197,7 @@ public class MainActivity extends Activity {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.i("Main Activity", e.toString());
 		}
 		
 		// update 
