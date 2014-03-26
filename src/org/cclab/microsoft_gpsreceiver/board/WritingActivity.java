@@ -53,9 +53,9 @@ public class WritingActivity extends Activity {
 		
 		// Initialize Components
 		// et_title = (EditText)findViewById(R.id.edittext_title);
-		et_nickname = (EditText)findViewById(R.id.edittext_nickname);
-		et_content = (EditText)findViewById(R.id.edittext_content);
-		cb_addnotice = (CheckBox)findViewById(R.id.checkbox_addnotice);
+		et_nickname = (EditText)findViewById(R.id.board_writing_edittext_nickname);
+		et_content = (EditText)findViewById(R.id.board_writing_edittext_content);
+		cb_addnotice = (CheckBox)findViewById(R.id.board_writing_checkbox_addnotice);
 		
 		init();
 		

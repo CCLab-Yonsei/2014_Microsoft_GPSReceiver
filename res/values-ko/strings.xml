@@ -58,4 +58,10 @@
     <string name="board_activity_title">BoardActivity</string>
     <string name="board_list_comment">댓글</string>
     
+    <!-- WritingActivity -->
+	<string name="writing_nickname_hint">닉네임</string>
+	<string name="writing_notice">공지사항</string>
+	<string name="writing_contents_hint">내용을 입력해 주세요</string>
+	<string name="writing_send">글쓰기</string>
+    
 </resources>

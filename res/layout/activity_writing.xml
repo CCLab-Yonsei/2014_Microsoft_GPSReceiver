@@ -14,34 +14,33 @@
 	    />
 	  -->
 	<EditText
-	    android:id="@+id/edittext_nickname"
+	    android:id="@+id/board_writing_edittext_nickname"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:hint="닉네임"
-	    />
+	    android:hint="@string/writing_nickname_hint" />
 	
 	
 	<CheckBox
-	    android:id="@+id/checkbox_addnotice"
+	    android:id="@+id/board_writing_checkbox_addnotice"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:visibility="invisible"
-	    android:text="공지 등록" />
+	    android:text="@string/writing_notice" />
 	
 	<EditText
-	    android:id="@+id/edittext_content"
+	    android:id="@+id/board_writing_edittext_content"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    
-	    android:hint="내용을 입력해주세요"
-	    />
-	
+	    android:gravity="top"
+	    android:hint="@string/writing_contents_hint"
+	    android:lines="5"
+	    android:maxLines="15" />
 	
 	<Button
-	    android:id="@+id/button_send"
+	    android:id="@+id/board_writing_button_send"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:onClick="onSend"
-	    android:text="전송"
-	    />
+	    android:text="@string/writing_send" />
+	
 </LinearLayout>

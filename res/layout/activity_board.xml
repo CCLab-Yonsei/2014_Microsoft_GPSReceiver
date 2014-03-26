@@ -4,15 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BoardActivity" >
-
-     
+    
     <Button
         android:id="@+id/button_write"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onWrite"
         android:text="글쓰기" />
-     
+    
 <!--     The PullToRefreshListView replaces a standard ListView widget. -->
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -27,7 +26,6 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         ptrAnimationStyle="flip"
-        android:smoothScrollbar="true"
-         />
-
+        android:smoothScrollbar="true" />
+    
 </LinearLayout>

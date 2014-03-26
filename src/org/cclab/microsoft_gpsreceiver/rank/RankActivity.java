@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 public class RankActivity extends Activity {
 
-	private static final String mRankAddress = "http://165.132.120.151/rank.aspx";
+	private static final String RANK_ADDRESS = "http://165.132.120.151/rank.aspx";
 	private int mTotal;
 	
 	@Override
@@ -36,15 +36,21 @@ public class RankActivity extends Activity {
 		
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+	}
+	
 	private class getRankListFromServer extends AsyncTask<Void, Void, ArrayList<ArrayList<String>>> {
 
 		@Override
 		protected ArrayList<ArrayList<String>> doInBackground(Void... params) {
 			
-			ArrayList<ArrayList<String>> RankList = new ArrayList<ArrayList<String>>();
+			ArrayList<ArrayList<String>> rankList = new ArrayList<ArrayList<String>>();
 					
 			try {
-				URL rank_url = new URL(mRankAddress);
+				URL rank_url = new URL(RANK_ADDRESS);
 											
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder builder = factory.newDocumentBuilder();
@@ -63,22 +69,20 @@ public class RankActivity extends Activity {
 					if(aitem.getNodeType() == Node.ELEMENT_NODE) {
 						rank++;
 						
-						ArrayList<String> RankRaw = new ArrayList<String>();
+						ArrayList<String> rankRaw = new ArrayList<String>();
 						
 //						Log.i("rank", "rank = " + String.valueOf(rank));
 //						Log.i("rank", "id = " + ((Element)aitem).getAttribute("id"));
-						
-						
-						RankRaw.add(String.valueOf(rank));
-						RankRaw.add( ((Element)aitem).getAttribute("id") );
+						rankRaw.add(String.valueOf(rank));
+						rankRaw.add(((Element)aitem).getAttribute("id"));
 	
-						int gps_cnt = Integer.parseInt(aitem.getFirstChild().getTextContent());
+						int gpsCount = Integer.parseInt(aitem.getFirstChild().getTextContent());
 //						Log.i("rank", "gps_cnt = " + String.valueOf(gps_cnt));
 						
-						RankRaw.add(String.valueOf(gps_cnt));
-						RankRaw.add(String.valueOf(gps_cnt/mTotal * 100));
+						rankRaw.add(String.valueOf(gpsCount));
+						rankRaw.add(String.valueOf(gpsCount/mTotal * 100));
 //						Log.i("rank", "percentage = " + String.valueOf(gps_cnt/mTotal * 100));
-						RankList.add(RankRaw);			
+						rankList.add(rankRaw);
 					}
 				}
 				
@@ -92,31 +96,36 @@ public class RankActivity extends Activity {
 				e.printStackTrace();
 			}
 			
-			return RankList;
+			return rankList;
 		}
 		
 		@Override
-		protected void onPostExecute(ArrayList<ArrayList<String>> RankList) {
+		protected void onPostExecute(ArrayList<ArrayList<String>> rankList) {
 			
 			LinearLayout rankVerticalLinear = (LinearLayout) findViewById(R.id.rankactivity_linearlayout_ranklist);
 			
-			for(ArrayList<String> rankRaw : RankList) {
+			for(ArrayList<String> rankRaw : rankList) {
+				
+				final String rank = rankRaw.get(0); 
+				final String contributor = rankRaw.get(1);
+				final String gpsCount = rankRaw.get(2);
+				final String percentage = rankRaw.get(3);
 				
 				LinearLayout rankListRaw = new LinearLayout(RankActivity.this);
-				TextView tv_rank = new TextView(RankActivity.this);
-				TextView tv_contributor_id = new TextView(RankActivity.this);
-				TextView tv_gps_cnt = new TextView(RankActivity.this);
-				TextView tv_percentage = new TextView(RankActivity.this);
+				TextView tvRank = new TextView(RankActivity.this);
+				TextView tvContributorId = new TextView(RankActivity.this);
+				TextView tvGpsCount = new TextView(RankActivity.this);
+				TextView tvPercentage = new TextView(RankActivity.this);
 				
-				tv_rank.setText(rankRaw.get(0));
-				tv_contributor_id.setText(rankRaw.get(1));
-				tv_gps_cnt.setText(rankRaw.get(2));
-				tv_percentage.setText(rankRaw.get(3));
+				tvRank.setText(rank);
+				tvContributorId.setText(contributor);
+				tvGpsCount.setText(gpsCount);
+				tvPercentage.setText(percentage);
 				
-				rankListRaw.addView(tv_rank);
-				rankListRaw.addView(tv_contributor_id);
-				rankListRaw.addView(tv_gps_cnt);
-				rankListRaw.addView(tv_percentage);
+				rankListRaw.addView(tvRank);
+				rankListRaw.addView(tvContributorId);
+				rankListRaw.addView(tvGpsCount);
+				rankListRaw.addView(tvPercentage);
 				
 				rankVerticalLinear.addView(rankListRaw);
 				
@@ -125,10 +134,4 @@ public class RankActivity extends Activity {
 		}
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-	}
-
 }

@@ -58,4 +58,10 @@
     <string name="board_activity_title">BoardActivity</string>
 	<string name="board_list_comment">Comment</string>
     
+	<!-- WritingActivity -->
+	<string name="writing_nickname_hint">Nickname</string>
+	<string name="writing_notice">Notice</string>
+	<string name="writing_contents_hint">Contents</string>
+	<string name="writing_send">Write</string>
+	
 </resources>

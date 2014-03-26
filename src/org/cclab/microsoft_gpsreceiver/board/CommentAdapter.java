@@ -83,18 +83,18 @@ public class CommentAdapter extends BaseAdapter {
 		if(position == 0) {
 			convertView = inflater.inflate(res_row_1, parent, false);
 			
-			tv_writer = (TextView)convertView.findViewById(R.id.textview_cwriter1);
-			tv_content = (TextView)convertView.findViewById(R.id.textview_ccontent1);
-			tv_date = (TextView)convertView.findViewById(R.id.textview_cdate1);
+			tv_writer = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_writer1);
+			tv_content = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_content1);
+			tv_date = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_date1);
 			
-			tv_comments_num = (TextView)convertView.findViewById(R.id.textview_ccomments_num1);
+			tv_comments_num = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_comments_num1);
 		}
 		else {
 			convertView = inflater.inflate(res_row, parent, false);
 			
-			tv_writer = (TextView)convertView.findViewById(R.id.textview_cwriter);
-			tv_content = (TextView)convertView.findViewById(R.id.textview_ccontent);
-			tv_date = (TextView)convertView.findViewById(R.id.textview_cdate);
+			tv_writer = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_writer);
+			tv_content = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_content);
+			tv_date = (TextView)convertView.findViewById(R.id.board_listview_textview_comment_date);
 		}
 		
 		String id = "";
