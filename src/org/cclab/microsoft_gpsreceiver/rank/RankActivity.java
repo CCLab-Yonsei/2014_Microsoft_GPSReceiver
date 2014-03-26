@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.cclab.microsoft_gpsreceiver.R;
+import org.cclab.microsoft_gpsreceiver.board.BoardActivity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,37 +18,60 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class RankActivity extends Activity {
+public class RankActivity extends ListActivity {
 
 	private static final String RANK_ADDRESS = "http://165.132.120.151/rank.aspx";
 	private int mTotal;
+	private ProgressDialog mProgress;
+	
+	private ArrayList<RankItem> rankList;
+	private RankAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rank);
 		
+		rankList = new ArrayList<RankItem>();
+		adapter = new RankAdapter(this, R.layout.rank_list_listview_row, rankList);
+		setListAdapter(adapter);
+	}
+	
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
 		new getRankListFromServer().execute();
 		
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-	}
-	
-	private class getRankListFromServer extends AsyncTask<Void, Void, ArrayList<ArrayList<String>>> {
+	private class getRankListFromServer extends AsyncTask<Void, Void, Integer> {
 
+		ArrayList<RankItem> temp = new ArrayList<RankItem>();
+		
 		@Override
-		protected ArrayList<ArrayList<String>> doInBackground(Void... params) {
+		protected void onPreExecute() {
+			mProgress = new ProgressDialog(RankActivity.this);
+			mProgress.setTitle("");
+			mProgress.setMessage("로딩중...");
+			mProgress.show();
 			
-			ArrayList<ArrayList<String>> rankList = new ArrayList<ArrayList<String>>();
+			rankList.clear();
+		}
+		
+		@Override
+		protected Integer doInBackground(Void... params) {
+			
+			
 					
 			try {
 				URL rank_url = new URL(RANK_ADDRESS);
@@ -69,67 +93,53 @@ public class RankActivity extends Activity {
 					if(aitem.getNodeType() == Node.ELEMENT_NODE) {
 						rank++;
 						
-						ArrayList<String> rankRaw = new ArrayList<String>();
+						RankItem aRank = new RankItem();
 						
 //						Log.i("rank", "rank = " + String.valueOf(rank));
 //						Log.i("rank", "id = " + ((Element)aitem).getAttribute("id"));
-						rankRaw.add(String.valueOf(rank));
-						rankRaw.add(((Element)aitem).getAttribute("id"));
+						aRank.rank = rank;
+						aRank.contributor = ((Element)aitem).getAttribute("id");
 	
 						int gpsCount = Integer.parseInt(aitem.getFirstChild().getTextContent());
+						aRank.gpsCount = gpsCount;
 //						Log.i("rank", "gps_cnt = " + String.valueOf(gps_cnt));
-						
-						rankRaw.add(String.valueOf(gpsCount));
-						rankRaw.add(String.valueOf(gpsCount/mTotal * 100));
+						aRank.percentage = (double)gpsCount/(double)mTotal * 100;
 //						Log.i("rank", "percentage = " + String.valueOf(gps_cnt/mTotal * 100));
-						rankList.add(rankRaw);
+						temp.add(aRank);
 					}
 				}
 				
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
+				return -1;
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
+				return -2;
 			} catch (SAXException e) {
 				e.printStackTrace();
+				return -3;
 			} catch (IOException e) {
 				e.printStackTrace();
+				return -4;
 			}
 			
-			return rankList;
+			return 0;
+			
 		}
 		
 		@Override
-		protected void onPostExecute(ArrayList<ArrayList<String>> rankList) {
+		protected void onPostExecute(Integer param) {
 			
-			LinearLayout rankVerticalLinear = (LinearLayout) findViewById(R.id.rankactivity_linearlayout_ranklist);
+			rankList.addAll(temp);
+			adapter.notifyDataSetChanged();
+			mProgress.dismiss();
 			
-			for(ArrayList<String> rankRaw : rankList) {
-				
-				final String rank = rankRaw.get(0); 
-				final String contributor = rankRaw.get(1);
-				final String gpsCount = rankRaw.get(2);
-				final String percentage = rankRaw.get(3);
-				
-				LinearLayout rankListRaw = new LinearLayout(RankActivity.this);
-				TextView tvRank = new TextView(RankActivity.this);
-				TextView tvContributorId = new TextView(RankActivity.this);
-				TextView tvGpsCount = new TextView(RankActivity.this);
-				TextView tvPercentage = new TextView(RankActivity.this);
-				
-				tvRank.setText(rank);
-				tvContributorId.setText(contributor);
-				tvGpsCount.setText(gpsCount);
-				tvPercentage.setText(percentage);
-				
-				rankListRaw.addView(tvRank);
-				rankListRaw.addView(tvContributorId);
-				rankListRaw.addView(tvGpsCount);
-				rankListRaw.addView(tvPercentage);
-				
-				rankVerticalLinear.addView(rankListRaw);
-				
-			}
+			if(param == -4)
+				Toast.makeText(RankActivity.this, "서버에 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
+			else if(param != 0) Toast.makeText(RankActivity.this, param + "알 수 없는 에러 발생. 게시판에 신고해주세요.", Toast.LENGTH_SHORT).show();
+			
+			
+			
 			
 		}
 	}

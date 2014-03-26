@@ -7,11 +7,9 @@
     android:background="#FFFFFF"
     tools:context="org.cclab.microsoft_gpsreceiver.rank.RankActivity" >
 
-    <LinearLayout
-        android:id="@+id/rankactivity_linearlayout_ranklist"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
