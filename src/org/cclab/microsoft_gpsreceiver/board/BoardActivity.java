@@ -89,7 +89,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		mFooterView.setVisibility(View.GONE);
 		listView.addFooterView(mFooterView);
 
-		
 	}
 
 	@Override
@@ -97,7 +96,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		// TODO Auto-generated method stub
 		setRefreshing();
 		super.onStart();
-
 
 	}
 	
