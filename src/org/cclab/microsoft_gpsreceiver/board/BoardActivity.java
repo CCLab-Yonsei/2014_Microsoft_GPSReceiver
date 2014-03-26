@@ -136,16 +136,17 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected void onPreExecute() {
+			super.onPreExecute();
 			
 			temp = new ArrayList<Items.Board>();
 			
 			progress = new ProgressDialog(BoardActivity.this);
-			progress.setTitle("");
-			progress.setMessage("로딩중...");
-			progress.show();
-				
 			
-			super.onPreExecute();
+			progress.setMessage("로딩중입니다..");
+			progress.setIndeterminate(true);
+			progress.setCancelable(true);
+			progress.show();
+			
 		}
 		
 		@Override
@@ -160,11 +161,11 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected void onPostExecute(Integer param) {
+			super.onPostExecute(param);
 			
 			postWorkInCommon(param, temp, true);
 			progress.dismiss();
 			
-			super.onPostExecute(param);
 		}
 	}	
 	private class RefreshTask extends AsyncTask<Void, Void, Integer> {
@@ -173,9 +174,11 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected void onPreExecute() {
-			temp = new ArrayList<Items.Board>();
 			super.onPreExecute();
+			
+			temp = new ArrayList<Items.Board>();
 		}
+		
 		@Override
 		protected Integer doInBackground(Void... params) {
 			// TODO Auto-generated method stub
@@ -188,10 +191,11 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected void onPostExecute(Integer param) {
+			super.onPostExecute(param);
+			
 			postWorkInCommon(param, temp, true);
 			ptrListView.onRefreshComplete();
 			
-			super.onPostExecute(param);
 		}
 	
 	}
@@ -201,11 +205,11 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected void onPreExecute() {
+			super.onPreExecute();
 			
 			temp = new ArrayList<Items.Board>();
 			mFooterView.setVisibility(View.VISIBLE);
-				
-			super.onPreExecute();
+			
 		}
 		
 		@Override
@@ -223,12 +227,13 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected void onPostExecute(Integer param) {
-
+			super.onPostExecute(param);
+			
 			postWorkInCommon(param, temp, false);
 			onLoadingMoreComplete();
 			mFooterView.setVisibility(View.GONE);
 			
-			super.onPostExecute(param);
+			
 		}
 	}	
 

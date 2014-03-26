@@ -72,6 +72,7 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		adapter = new CommentAdapter(this, R.layout.board_view_article_listview_row,
 				R.layout.board_view_comment_listview_row,
 				commentList);
+		ptrListView.setOnRefreshListener(this);
 		ptrListView.setAdapter(adapter);
 		
 		et_nickname = (EditText)findViewById(R.id.edittext_comment_nickname);
@@ -81,6 +82,7 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
 		setRefreshing();
 		
 	}
@@ -119,18 +121,16 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		
 		@Override
 		protected void onPostExecute(Integer param) {
-		
+			super.onPostExecute(param);		
+
 			commentList.clear();
 			commentList.add(board);
-			
-			for(int i=0; i<temp.size(); i++)
-				commentList.add(temp.get(i));
-			
+			commentList.addAll(temp);
 			adapter.notifyDataSetChanged();
-			progress.dismiss();
 			
+			progress.dismiss();
 			toastErrorMessage(param);
-			super.onPostExecute(param);
+			
 		}
 	}	
 	private class RefreshTask extends AsyncTask<Void, Void, Integer> {
@@ -153,18 +153,17 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		
 		@Override
 		protected void onPostExecute(Integer param) {
+			super.onPostExecute(param);
+			
 			commentList.clear();
 			commentList.add(board);
-			
-			for(int i=0; i<temp.size(); i++)
-				commentList.add(temp.get(i));
+			commentList.addAll(temp);
 			
 			adapter.notifyDataSetChanged();
-			ptrListView.onRefreshComplete();
 			
+			ptrListView.onRefreshComplete();
 			toastErrorMessage(param);
 			
-			super.onPostExecute(param);
 		}
 	}
 	
@@ -179,8 +178,8 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		protected void onPreExecute() {
 			
 			progress = new ProgressDialog(CommentActivity.this);
-			progress.setTitle("잠시만 기다려주세요");
-			progress.setMessage("잠깐 기다리라고..");
+			
+			progress.setMessage("로딩중입니다..");
 			progress.setIndeterminate(true);
 			progress.setCancelable(true);
 			progress.show();
