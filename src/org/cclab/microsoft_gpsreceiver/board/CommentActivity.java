@@ -382,10 +382,17 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		new RefreshTask().execute();
 	}
 	public void onCommentSend(View v) {
-		if(et_nickname.getText().length() == 0 &&
-				et_content.getText().length() == 0) {
+		
+		String str_nickname = et_nickname.getText().toString();
+		String str_content = et_content.getText().toString();
+		if(str_nickname.trim().length() == 0 ||
+				str_content.trim().length() == 0) {
 			Toast.makeText(this, "닉네임과 댓글내용을 작성해주세요!", Toast.LENGTH_SHORT).show();
 		}
+		else if(str_nickname.contains("<") || str_nickname.contains(">") ||
+				str_content.contains("<") || str_content.contains(">"))
+			Toast.makeText(this, "닉네임과 댓글에 \"<\"과 \">\"는 사용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+
 		else {
 			new SendPostTask().execute(
 					String.valueOf(board.no), Utility.getStudentId(this), et_nickname.getText().toString(),

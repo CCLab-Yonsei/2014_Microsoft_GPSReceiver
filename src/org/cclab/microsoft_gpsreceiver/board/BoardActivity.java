@@ -254,7 +254,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			for( Node aitem=element.getFirstChild(); aitem!=null; aitem=aitem.getNextSibling() ) {
 
 				Items.Board board = new Items.Board();
-				Person writer = writer = new Person();
+				Person writer = new Person();
 				
 				if(aitem.getNodeType() == Node.ELEMENT_NODE) {
 					// notice or normal
@@ -277,7 +277,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 							String tagName = eleIn.getTagName();
 							
 							if(tagName.equals("writer")) {
-								writer.sex = Integer.parseInt(eleIn.getAttribute("sex")) == 1 ? "남자" : "여자";
+								writer.sex =eleIn.getAttribute("sex");
 								writer.name = eleIn.getAttribute("name");
 								writer.id = eleIn.getAttribute("wid");
 								writer.nickname = eleIn.getFirstChild().getTextContent();

@@ -90,15 +90,18 @@ public class WritingActivity extends Activity {
 		
 		// if(title.length() == 0)
 		//	title = "제목 없음";
-		if(content.length() == 0)
-			state = -1; 
-		if(nickname.length() == 0)
-			state = -2;
-		
-		if(state == 0) {
-			new SendPostTask().execute(id, content, kind, nickname);
+		if(content.trim().length() == 0 || nickname.trim().length() == 0) {
+			Toast.makeText(this, "닉네임과 글내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
 		}
-		else Toast.makeText(this, "닉네임과 글내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+		else if(nickname.contains("<") || nickname.contains(">") ||
+				content.contains("<") || content.contains(">")) {
+			Toast.makeText(this, "닉네임과 댓글에 \"<\"과 \">\"는 사용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+			state = -3;
+		}
+
+		else
+			new SendPostTask().execute(id, content, kind, nickname);
+
 	
 		Log.i("Wrting Activity", kind);
 	}
