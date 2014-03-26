@@ -41,11 +41,12 @@ public class Items {
 			this.writer = writer;
 		}
 		
-		public Board(int no, String content, int kind, String date) {
+		public Board(int no, String content, int kind, String date, int commentNum) {
 			this.no = no;
 			this.content = content;
 			this.kind = kind;
 			this.date = date;
+			this.commentNum = commentNum;
 		}
 
 		@Override
@@ -62,7 +63,7 @@ public class Items {
 			dest.writeString(content);
 			dest.writeInt(kind);
 			dest.writeString(date);
-			
+			dest.writeInt(commentNum);
 			
 		}
 		
@@ -75,9 +76,9 @@ public class Items {
 				String content = source.readString();
 				int kind = source.readInt();
 				String date = source.readString();
+				int commentNum = source.readInt();
 				
-				
-				return new Board(no, content, kind, date);
+				return new Board(no, content, kind, date, commentNum);
 			}
 
 			@Override

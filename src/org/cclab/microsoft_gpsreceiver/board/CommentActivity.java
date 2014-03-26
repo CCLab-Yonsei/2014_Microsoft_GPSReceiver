@@ -42,7 +42,6 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 	private ArrayList<Items.Base> commentList;
 	
 	private PullToRefreshListView ptrListView;
-	private ListView listView;
 	private CommentAdapter adapter;
 	
 	private ProgressDialog progress;
@@ -283,7 +282,7 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 			for( Node aitem=element.getFirstChild(); aitem!=null; aitem=aitem.getNextSibling() ) {
 	
 				Items.Comment comment = new Items.Comment();
-				Person writer = writer = new Person();
+				Person writer = new Person();
 				
 				if(aitem.getNodeType() == Node.ELEMENT_NODE) {
 					
