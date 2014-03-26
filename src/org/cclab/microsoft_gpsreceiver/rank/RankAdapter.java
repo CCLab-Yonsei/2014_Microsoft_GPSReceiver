@@ -67,23 +67,32 @@ public class RankAdapter extends ArrayAdapter<RankItem> {
 		}
 		
 		
-		if(position == 0)
-			convertView.setBackgroundColor(Color.rgb(229, 157, 96));
-		else if(position == 1)
-			convertView.setBackgroundColor(Color.rgb(240, 240, 240));
-		else if(position == 3) {
-			
+		if(position == 0) {
+			convertView.setBackgroundColor(Color.parseColor("#50c0e9"));
 		}
-		else convertView.setBackgroundColor(Color.rgb(255, 255, 255));
+		else if(position == 1) {
+			convertView.setBackgroundColor(Color.parseColor("#8ad5f0"));
+		}
+		else if(position == 2) {
+			convertView.setBackgroundColor(Color.parseColor("#a8dff4"));
+		}
+		else if(position >= 3 && position < 10) {
+			convertView.setBackgroundColor(Color.parseColor("#c5eaf8"));
+		}
+		else if(position >= 10 && position < 30) {
+			convertView.setBackgroundColor(Color.parseColor("#e2f4fb"));
+		}
+		else convertView.setBackgroundColor(Color.parseColor("#ffffff"));
 		
 		RankItem item = items.get(position);
 		holder.tv_rank.setText( item.rank + "");
 		if( Utility.getStudentId(context).equals(item.contributor) ) {
-			holder.tv_contributor.setText( item.contributor );
+			holder.tv_contributor.setText( item.contributor);
 			// TODO : size up font!!
 		}
-		else
-			holder.tv_contributor.setText( item.contributor.substring(0, item.contributor.length()-1) + "***");
+		else {
+			holder.tv_contributor.setText( item.contributor.substring(0, item.contributor.length()-3) + "***");
+		}
 		
 		holder.tv_measure.setText( item.gpsCount + "(" + String.format("%2.2f", item.percentage) + "%)" );
 		

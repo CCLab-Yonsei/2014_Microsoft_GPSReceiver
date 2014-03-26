@@ -22,11 +22,13 @@ import org.xml.sax.InputSource;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -83,12 +85,12 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		
 	}
 	
-	
-	
-	
-	// ============================================================
-	// Communicate Tasks
-	// ============================================================
+	/**
+	 * Communication tasks
+	 *  
+	 * @author gnoowik
+	 *
+	 */
 	private class RefreshTaskOnCreate extends AsyncTask<Void, Void, Integer> {
 		
 		ArrayList<Items.Base> temp;
@@ -164,8 +166,13 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 			
 			super.onPostExecute(param);
 		}
-
-}
+	}
+	
+	/**
+	 * 
+	 * @author gnoowik
+	 *
+	 */
 	private class SendPostTask extends AsyncTask<String, Void, Integer> {
 
 		@Override
@@ -177,6 +184,7 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 			progress.setIndeterminate(true);
 			progress.setCancelable(true);
 			progress.show();
+			
 			super.onPreExecute();
 		}
 		
@@ -255,6 +263,13 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 			else if(param == -2) {
 				Toast.makeText(CommentActivity.this, "서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
 			}
+			
+			et_nickname.setText("");
+			et_content.setText("");
+			
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(et_nickname.getWindowToken(), 0);
+			imm.hideSoftInputFromWindow(et_content.getWindowToken(), 0);
 			
 			super.onPostExecute(param);
 		}
