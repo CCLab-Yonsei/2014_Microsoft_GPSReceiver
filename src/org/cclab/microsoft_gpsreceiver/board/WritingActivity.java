@@ -74,10 +74,7 @@ public class WritingActivity extends Activity {
 	
 	public void onSend(View v) {
 		
-		int state = 0;
-		
 		String id = Utility.getStudentId(this);
-		// String title = et_title.getText().toString();
 		String content = et_content.getText().toString();
 		String nickname = et_nickname.getText().toString();
 		String kind;
@@ -91,19 +88,15 @@ public class WritingActivity extends Activity {
 		// if(title.length() == 0)
 		//	title = "제목 없음";
 		if(content.trim().length() == 0 || nickname.trim().length() == 0) {
-			Toast.makeText(this, "닉네임과 글내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(R.string.writing_formcheck_empty), Toast.LENGTH_SHORT).show();
 		}
 		else if(nickname.contains("<") || nickname.contains(">") ||
 				content.contains("<") || content.contains(">")) {
-			Toast.makeText(this, "닉네임과 댓글에 \"<\"과 \">\"는 사용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
-			state = -3;
+			Toast.makeText(this, getResources().getString(R.string.writing_formcheck_script), Toast.LENGTH_SHORT).show();
 		}
-
-		else
+		else {
 			new SendPostTask().execute(id, content, kind, nickname);
-
-	
-		Log.i("Wrting Activity", kind);
+		}
 	}
 	
 	private class SendPostTask extends AsyncTask<String, Void, Integer> {
@@ -112,11 +105,11 @@ public class WritingActivity extends Activity {
 		protected void onPreExecute() {
 			
 			dialog = new ProgressDialog(WritingActivity.this);
-			dialog.setTitle("잠시만 기다려주세요");
-			dialog.setMessage("잠깐 기다리라고..");
+			dialog.setMessage(getResources().getString(R.string.writing_waiting));
 			dialog.setIndeterminate(true);
 			dialog.setCancelable(true);
 			dialog.show();
+			
 			super.onPreExecute();
 		}
 		
@@ -178,7 +171,6 @@ public class WritingActivity extends Activity {
 				return -1;
 			}
 			
-			
 			return 0;
 		}
 		
@@ -188,14 +180,14 @@ public class WritingActivity extends Activity {
 			dialog.dismiss();
 			
 			if(param == 0) {
-				Toast.makeText(WritingActivity.this, "글 작성이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(WritingActivity.this, getResources().getString(R.string.writing_complete), Toast.LENGTH_SHORT).show();
 				finish();
 			}
 			else if(param == -1) {
-				Toast.makeText(WritingActivity.this, "네트워크 상태가 좋지 않습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(WritingActivity.this, getResources().getString(R.string.board_error_io), Toast.LENGTH_SHORT).show();
 			}
 			else if(param == -2) {
-				Toast.makeText(WritingActivity.this, "서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
+				Toast.makeText(WritingActivity.this, getResources().getString(R.string.board_error_malformedurl),  Toast.LENGTH_SHORT).show();
 			}
 			
 			super.onPostExecute(param);

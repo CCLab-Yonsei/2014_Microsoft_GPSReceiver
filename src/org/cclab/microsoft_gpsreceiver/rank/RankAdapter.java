@@ -24,7 +24,7 @@ public class RankAdapter extends ArrayAdapter<RankItem> {
 	
 	public RankAdapter(Context context, int resource, ArrayList<RankItem> objects) {
 		super(context, resource, objects);
-		// TODO Auto-generated constructor stub
+
 		this.context = context;
 		res = resource;
 		items = objects;

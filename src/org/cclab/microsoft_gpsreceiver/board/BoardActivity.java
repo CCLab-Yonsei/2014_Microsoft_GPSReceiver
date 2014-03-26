@@ -1,7 +1,5 @@
 package org.cclab.microsoft_gpsreceiver.board;
 
-/* Main activity of board */
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -53,10 +51,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	ProgressDialog progress;
 	boolean bFirstLoading = true;
 	
-	/////////////////////////////////
-	// Variable for Loadmore
-	////////////////////////////////
-	
 	// footer view
 	private View mFooterView;
 
@@ -93,20 +87,16 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		setRefreshing();
 		super.onStart();
 
 	}
-	
 	
 	// ============================================================
 	// Listeners method
 	// ============================================================
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		// TODO Auto-generated method stub
-		
 		new RefreshTask().execute();
 	}
 	public void onWrite(View v) {
@@ -118,7 +108,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(BoardActivity.this, CommentActivity.class);
 		
 		intent.putExtra("board", boardList.get(position-1));
@@ -127,9 +116,12 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	}
 
 
-	// ============================================================
-	// Communicate Tasks
-	// ============================================================
+	/**
+	 * Communication tasks
+	 * 
+	 * @author gnoowik
+	 *
+	 */
 	private class RefreshTaskOnCreate extends AsyncTask<Void, Void, Integer> {
 		
 		ArrayList<Items.Board> temp;
@@ -142,7 +134,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			
 			progress = new ProgressDialog(BoardActivity.this);
 			
-			progress.setMessage("로딩중입니다..");
+			progress.setMessage(getResources().getString(R.string.board_loading));
 			progress.setIndeterminate(true);
 			progress.setCancelable(true);
 			progress.show();
@@ -151,10 +143,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
 			
-			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
-			//		getLastBoardNo() );
 			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=-1"
 					, temp);
 		}
@@ -181,9 +170,6 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last="+
-			//		getLastBoardNo() );
 			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
 					getLastItemNo(), temp);
 			
@@ -214,11 +200,9 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=lm&last=" +
@@ -322,13 +306,13 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	private void toastErrorMessage(int state) {
 		
 		if(state == -1) {
-			Toast.makeText(BoardActivity.this, "IOException 네트워크 상태가 좋지 않습니다.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(BoardActivity.this, getResources().getString(R.string.board_error_io), Toast.LENGTH_SHORT).show();
 		}
 		else if(state == -2) {
-			Toast.makeText(BoardActivity.this, "MalforemdURLException 서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
+			Toast.makeText(BoardActivity.this, getResources().getString(R.string.board_error_malformedurl),  Toast.LENGTH_SHORT).show();
 		}
 		else if(state == -3) {
-			Toast.makeText(BoardActivity.this, "Exception 알 수 없는 오류.",  Toast.LENGTH_SHORT).show();
+			Toast.makeText(BoardActivity.this, getResources().getString(R.string.board_error),  Toast.LENGTH_SHORT).show();
 		}
 	}
 	private void setFirstRefreshing() {
@@ -343,7 +327,14 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			ptrListView.setRefreshing();
 		}
 	}
-	// Toast errmsg and calculate remained item num in database
+
+	/**
+	 * Toast errmsg and calculate remained item num in database
+	 * 
+	 * @param param
+	 * @param temp
+	 * @param listClear
+	 */
 	private void postWorkInCommon(int param, ArrayList<Items.Board> temp, boolean listClear) {
 		if(listClear)
 			boardList.clear();
@@ -372,25 +363,17 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	// ============================================================
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// TODO Auto-generated method stub
-		//bug fix: listview was not clickable after scroll
-		
-		if ( scrollState == OnScrollListener.SCROLL_STATE_IDLE )
-    	{
+		if(scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
       		view.invalidateViews();
     	}
-		        	
 		mCurrentScrollState = scrollState;
-
-
 	}
+	
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		// TODO Auto-generated method stub
 		
 		if (visibleItemCount == totalItemCount) {
-			// mProgressBarLoadMore.setVisibility(View.GONE);
 			return;
 		}
 
@@ -398,14 +381,14 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 
 		if (!mIsLoadingMore && loadMore
 				&& mCurrentScrollState != SCROLL_STATE_IDLE && bIsThereItemToLoad) {
-			// mProgressBarLoadMore.setVisibility(View.VISIBLE);
-			Log.i(TAG, "LoadMore!");
 			onLoadMore();
 		}
 
 	}
 	
-	// Called when if there are items to load more end of listview
+	/**
+	 * Called when if there are items to load more end of listview
+	 */
 	private void onLoadMore() {
 		mIsLoadingMore = true;
 		new LoadMoreTask().execute();

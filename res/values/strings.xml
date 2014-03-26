@@ -7,7 +7,9 @@
     <!-- GpsService -->
     <string name="service_start">GPS logging is successfully started.</string>
     <string name="service_stop">GPS logging is successfully finished.</string>
-    <string name="service_error">Something goes wrong!</string>
+    <string name="service_error">Something goes wrong.</string>
+    <string name="service_thanks">Thanks.</string>
+    <string name="service_warning_gps_off">Do NOT turn off GPS while logging.</string>
     <string name="service_numberofpoints_message">points are collected.</string>
     
     <!-- MainActivity -->
@@ -35,6 +37,7 @@
     
     <!-- Rank -->
     <string name="rank_activity_title">RankActivity</string>
+    <string name="rank_loading">Loading..</string>
     
     <!-- About -->
     <string name="about_activity_title">AboutActivity</string>
@@ -57,14 +60,25 @@
     <!-- BoardActivity -->
     <string name="board_activity_title">BoardActivity</string>
 	<string name="board_list_comment">Comment</string>
+	<string name="board_loading">Loading</string>
+	<string name="board_error_io">Networking problem</string>
+    <string name="board_error_malformedurl">Server does NOT response.</string>
+    <string name="board_error">Unknown error occurs.</string>
     
 	<!-- WritingActivity -->
 	<string name="writing_nickname_hint">Nickname</string>
 	<string name="writing_notice">Notice</string>
 	<string name="writing_contents_hint">Contents</string>
 	<string name="writing_send">Write</string>
+	<string name="writing_formcheck_empty">Empty nick name or contents</string>
+    <string name="writing_formcheck_script">There are not allowed characters.</string>
+    <string name="writing_waiting">Please wait</string>
+    <string name="writing_complete">Complete</string>
 	
 	<!-- CommentActivity -->
 	<string name="comment_contents_hint">Contents</string>
 	<string name="comment_send">Write</string>
+	<string name="comment_complete">Complete</string>
+	
+	
 </resources>

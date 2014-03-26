@@ -14,10 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-/*
-* Adapter for board item
-* Normal user adapter
-*/
+/**
+ * Adapter for board item
+ * Normal user adapter
+ *  
+ * @author Han Park
+ *
+ */
 public class BoardAdapter extends ArrayAdapter<Items.Board> {
 
 	int res;
@@ -29,7 +32,7 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 	
 	public BoardAdapter(Context context, int resource, ArrayList<Board> objects) {
 		super(context, resource, objects);
-		// TODO Auto-generated constructor stub
+
 		res = resource;
 		ctx = context;
 		
@@ -42,14 +45,12 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 	private static class ViewHolder {
 		
 		public final TextView tv_writer;
-		// public final TextView tv_title;
 		public final TextView tv_content;
 		public final TextView tv_date;
 		public final TextView tv_comments_num;
 		
 		public ViewHolder(TextView writer, TextView content, TextView date, TextView comments_num) {
 			this.tv_writer = writer;
-			// this.tv_title = title;
 			this.tv_content = content;
 			this.tv_date = date;
 			this.tv_comments_num = comments_num;
@@ -67,7 +68,6 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 			
 			holder = new ViewHolder(
 					(TextView)convertView.findViewById(R.id.board_list_textview_writer),
-				//	(TextView)convertView.findViewById(R.id.textview_btitle),
 					(TextView)convertView.findViewById(R.id.board_list_textview_content),
 					(TextView)convertView.findViewById(R.id.board_list_textview_date),
 					(TextView)convertView.findViewById(R.id.board_list_textview_comments_num)
@@ -88,8 +88,6 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 		else convertView.setBackgroundColor(Color.WHITE);
 		
 		holder.tv_writer.setText( item.writer.nickname + " (" + item.writer.hashedId.substring(0, 9) + ")" );
-		
-		// holder.tv_title.setText( item.title + "(" + item.commentNum + ")" );
 		holder.tv_content.setText( item.content );
 		holder.tv_date.setText( item.date );
 		holder.tv_comments_num.setText( item.commentNum + "" );

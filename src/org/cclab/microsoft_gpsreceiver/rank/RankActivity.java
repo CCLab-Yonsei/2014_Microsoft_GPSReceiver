@@ -10,20 +10,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.cclab.microsoft_gpsreceiver.R;
-import org.cclab.microsoft_gpsreceiver.board.BoardActivity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RankActivity extends ListActivity {
@@ -61,8 +57,7 @@ public class RankActivity extends ListActivity {
 		@Override
 		protected void onPreExecute() {
 			mProgress = new ProgressDialog(RankActivity.this);
-			mProgress.setTitle("");
-			mProgress.setMessage("로딩중...");
+			mProgress.setMessage(getResources().getString(R.string.rank_loading));
 			mProgress.show();
 			
 			rankList.clear();
@@ -135,8 +130,8 @@ public class RankActivity extends ListActivity {
 			mProgress.dismiss();
 			
 			if(param == -4)
-				Toast.makeText(RankActivity.this, "서버에 연결할 수 없습니다.", Toast.LENGTH_SHORT).show();
-			else if(param != 0) Toast.makeText(RankActivity.this, param + "알 수 없는 에러 발생. 게시판에 신고해주세요.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RankActivity.this, getResources().getString(R.string.board_error_io), Toast.LENGTH_SHORT).show();
+			else if(param != 0) Toast.makeText(RankActivity.this, getResources().getString(R.string.board_error), Toast.LENGTH_SHORT).show();
 			
 			
 			

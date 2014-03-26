@@ -204,25 +204,23 @@ public class GpsService extends Service {
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
 			Log.i("Gps Service", "onProviderEnabled()");
 
 			if(bGpsTurnOff) {
-				Toast.makeText(GpsService.this, "감사합니다!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(GpsService.this, getResources().getString(R.string.service_thanks), Toast.LENGTH_SHORT).show();
 				bGpsTurnOff = false;
 			}
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
 			Log.i("Gps Service", "onProviderDisabled()");
 			
 			vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(vibPattern, -1);
 			
 			bGpsTurnOff = true;
-			Toast.makeText(GpsService.this, "기록 중에 GPS를 끄지말아주세요!", Toast.LENGTH_LONG).show();
+			Toast.makeText(GpsService.this, getResources().getString(R.string.service_warning_gps_off), Toast.LENGTH_LONG).show();
 		}
 
 	}

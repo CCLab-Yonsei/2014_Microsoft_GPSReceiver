@@ -104,7 +104,7 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 			
 			progress = new ProgressDialog(CommentActivity.this);
 			progress.setTitle("");
-			progress.setMessage("로딩중...");
+			progress.setMessage(getResources().getString(R.string.board_loading));
 			progress.show();
 
 			super.onPreExecute();
@@ -112,10 +112,6 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			
-			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
-			//		getLastBoardNo() );
 			return getCommentListFromServer("http://165.132.120.151/comment_list.aspx?bid=" + board.no, temp);
 		}
 		
@@ -144,9 +140,6 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		}
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last="+
-			//		getLastBoardNo() );
 			return getCommentListFromServer("http://165.132.120.151/comment_list.aspx?bid=" + board.no, temp);
 			
 		}
@@ -253,14 +246,14 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 			progress.dismiss();
 			
 			if(param == 0) {
-				Toast.makeText(CommentActivity.this, "댓글 작성이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(CommentActivity.this, getResources().getString(R.string.comment_complete), Toast.LENGTH_SHORT).show();
 				new RefreshTask().execute();
 			}
 			else if(param == -1) {
-				Toast.makeText(CommentActivity.this, "네트워크 상태가 좋지 않습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(CommentActivity.this, getResources().getString(R.string.board_error_io), Toast.LENGTH_SHORT).show();
 			}
 			else if(param == -2) {
-				Toast.makeText(CommentActivity.this, "서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
+				Toast.makeText(CommentActivity.this, getResources().getString(R.string.board_error_malformedurl),  Toast.LENGTH_SHORT).show();
 			}
 			
 			et_nickname.setText("");
@@ -348,13 +341,13 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 	private void toastErrorMessage(int state) {
 			
 			if(state == -1) {
-				Toast.makeText(CommentActivity.this, "IOException 네트워크 상태가 좋지 않습니다.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(CommentActivity.this, getResources().getString(R.string.board_error_io), Toast.LENGTH_SHORT).show();
 			}
 			else if(state == -2) {
-				Toast.makeText(CommentActivity.this, "MalforemdURLException 서버가 응답하지 않습니다.",  Toast.LENGTH_SHORT).show();
+				Toast.makeText(CommentActivity.this, getResources().getString(R.string.board_error_malformedurl),  Toast.LENGTH_SHORT).show();
 			}
 			else if(state == -3) {
-				Toast.makeText(CommentActivity.this, "Exception 알 수 없는 오류.",  Toast.LENGTH_SHORT).show();
+				Toast.makeText(CommentActivity.this, getResources().getString(R.string.board_error),  Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -377,20 +370,20 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 	// ============================================================
 	@Override
 	public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-		// TODO Auto-generated method stub
 		new RefreshTask().execute();
 	}
 	public void onCommentSend(View v) {
 		
 		String str_nickname = et_nickname.getText().toString();
 		String str_content = et_content.getText().toString();
+		
 		if(str_nickname.trim().length() == 0 ||
 				str_content.trim().length() == 0) {
-			Toast.makeText(this, "닉네임과 댓글내용을 작성해주세요!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(R.string.writing_formcheck_empty), Toast.LENGTH_SHORT).show();
 		}
 		else if(str_nickname.contains("<") || str_nickname.contains(">") ||
 				str_content.contains("<") || str_content.contains(">"))
-			Toast.makeText(this, "닉네임과 댓글에 \"<\"과 \">\"는 사용하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getResources().getString(R.string.writing_formcheck_script), Toast.LENGTH_SHORT).show();
 
 		else {
 			new SendPostTask().execute(
