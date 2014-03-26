@@ -1,7 +1,6 @@
 package org.cclab.microsoft_gpsreceiver.board;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.cclab.microsoft_gpsreceiver.R;
 import org.cclab.microsoft_gpsreceiver.Utility;
@@ -67,11 +66,11 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 			convertView = inflater.inflate(res, parent, false);
 			
 			holder = new ViewHolder(
-					(TextView)convertView.findViewById(R.id.textview_bwriter),
+					(TextView)convertView.findViewById(R.id.board_list_textview_writer),
 				//	(TextView)convertView.findViewById(R.id.textview_btitle),
-					(TextView)convertView.findViewById(R.id.textview_bcontent),
-					(TextView)convertView.findViewById(R.id.textview_bdate),
-					(TextView)convertView.findViewById(R.id.textview_bcomments_num)
+					(TextView)convertView.findViewById(R.id.board_list_textview_content),
+					(TextView)convertView.findViewById(R.id.board_list_textview_date),
+					(TextView)convertView.findViewById(R.id.board_list_textview_comments_num)
 				
 					);
 			
@@ -88,11 +87,6 @@ public class BoardAdapter extends ArrayAdapter<Items.Board> {
 		}
 		else convertView.setBackgroundColor(Color.WHITE);
 		
-//		if(bAdmin)
-//			holder.tv_writer.setText( item.writer.nickname + "(" + item.writer.id + ")" );
-//		else
-//			holder.tv_writer.setText( item.writer.nickname + "(" + item.writer.hashedId.substring(0, 9) + ")" );
-//		
 		holder.tv_writer.setText( item.writer.nickname + " (" + item.writer.hashedId.substring(0, 9) + ")" );
 		
 		// holder.tv_title.setText( item.title + "(" + item.commentNum + ")" );

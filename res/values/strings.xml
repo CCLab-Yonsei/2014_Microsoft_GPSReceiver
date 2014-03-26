@@ -64,4 +64,7 @@
 	<string name="writing_contents_hint">Contents</string>
 	<string name="writing_send">Write</string>
 	
+	<!-- CommentActivity -->
+	<string name="comment_contents_hint">Contents</string>
+	<string name="comment_send">Write</string>
 </resources>

@@ -68,8 +68,8 @@ public class CommentActivity extends ListActivity implements OnRefreshListener<L
 		board.writer = intent.getExtras().getParcelable("writer");
 		
 		ptrListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list_comment);
-		adapter = new CommentAdapter(this, R.layout.listview_comment_row_1,
-				R.layout.listview_comment_row,
+		adapter = new CommentAdapter(this, R.layout.board_view_article_listview_row,
+				R.layout.board_view_comment_listview_row,
 				commentList);
 		ptrListView.setAdapter(adapter);
 		

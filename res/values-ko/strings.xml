@@ -64,4 +64,8 @@
 	<string name="writing_contents_hint">내용을 입력해 주세요</string>
 	<string name="writing_send">글쓰기</string>
     
+	<!-- CommentActivity -->
+	<string name="comment_contents_hint">댓글을 작성해 주세요</string>
+	<string name="comment_send">댓글쓰기</string>
+	
 </resources>

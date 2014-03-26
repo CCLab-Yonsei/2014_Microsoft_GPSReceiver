@@ -79,13 +79,13 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		// ptrListView.setOnLastItemVisibleListener(lastListener);
 		
 		boardList = new ArrayList<Board>();	
-		adapter = new BoardAdapter(this, R.layout.listview_board_row, boardList);
+		adapter = new BoardAdapter(this, R.layout.board_list_listview_row, boardList);
 		ptrListView.setAdapter(adapter);
 		
 		// registerForContextMenu(listView);
 		// Set footer view
 		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		mFooterView = (View)inflater.inflate(R.layout.footer_loadmore, null);
+		mFooterView = (View)inflater.inflate(R.layout.board_footer_loadmore, null);
 		mFooterView.setVisibility(View.GONE);
 		listView.addFooterView(mFooterView);
 

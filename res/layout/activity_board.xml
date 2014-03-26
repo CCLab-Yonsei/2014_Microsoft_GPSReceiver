@@ -5,19 +5,13 @@
     android:orientation="vertical"
     tools:context=".BoardActivity" >
     
-    <Button
-        android:id="@+id/button_write"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onWrite"
-        android:text="글쓰기" />
-    
 <!--     The PullToRefreshListView replaces a standard ListView widget. -->
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/pull_refresh_list_board"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:cacheColorHint="#00000000"
         android:divider="#f3f3f3"
         android:dividerHeight="1dp"
@@ -27,5 +21,13 @@
         android:headerDividersEnabled="false"
         ptrAnimationStyle="flip"
         android:smoothScrollbar="true" />
+
+    <Button
+        android:id="@+id/button_write"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onWrite"
+        android:text="@string/writing_send"
+        android:textSize="14sp" />
     
 </LinearLayout>

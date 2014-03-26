@@ -9,38 +9,40 @@
         android:id="@+id/pull_refresh_list_comment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_weight="1"
         android:cacheColorHint="#00000000"
-        android:divider="#19000000"
-        android:dividerHeight="4dp"
+        android:divider="#f3f3f3"
+        android:dividerHeight="1dp"
         android:fadingEdge="none"
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         ptrAnimationStyle="flip"
-        android:smoothScrollbar="true"
-         />
+        android:smoothScrollbar="true" />
  
-    
     <EditText
         android:id="@+id/edittext_comment_nickname"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" 
-        android:hint="닉네임"/>
+        android:layout_height="wrap_content"
+        android:hint="@string/writing_nickname_hint"
+        android:textSize="14sp" />
     
     <EditText
         android:id="@+id/edittext_comment_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:hint="댓글 내용을 작성해주세요.." />
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:hint="@string/comment_contents_hint"
+        android:textSize="14sp"
+        android:lines="4"
+        android:maxLines="4" />
     
     <Button
         android:id="@+id/button_comment_send"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/comment_send"
+        android:textSize="14sp"
         android:onClick="onCommentSend" />
     
     
