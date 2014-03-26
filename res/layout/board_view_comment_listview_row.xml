@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="7dp" >
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="7dp"
+    android:paddingRight="7dp" >
     
     <TextView
         android:id="@+id/board_view_comment_textview_content"

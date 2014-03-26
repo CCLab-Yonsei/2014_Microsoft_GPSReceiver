@@ -26,6 +26,7 @@
         android:id="@+id/button_write"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:onClick="onWrite"
         android:text="@string/writing_send"
         android:textSize="14sp" />
