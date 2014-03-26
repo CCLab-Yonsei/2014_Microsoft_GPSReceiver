@@ -21,21 +21,18 @@ import org.xml.sax.InputSource;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -61,13 +58,11 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	////////////////////////////////
 	
 	// footer view
-	private RelativeLayout mFooterView;
-	// private TextView mLabLoadMore;
-	private ProgressBar mProgressBarLoadMore;
-	// To know if the list is loading more items
+	private View mFooterView;
+
 	private boolean mIsLoadingMore = false;
 	private int mCurrentScrollState;
-	
+	private boolean bIsThereItemToLoad = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +75,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		// Set listeners
 		ptrListView.setOnRefreshListener(this);
 		listView.setOnItemClickListener(this);
+		listView.setOnScrollListener(this);
 		// ptrListView.setOnLastItemVisibleListener(lastListener);
 		
 		boardList = new ArrayList<Board>();	
@@ -87,6 +83,12 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 		ptrListView.setAdapter(adapter);
 		
 		// registerForContextMenu(listView);
+		// Set footer view
+		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mFooterView = (View)inflater.inflate(R.layout.footer_loadmore, null);
+		mFooterView.setVisibility(View.GONE);
+		listView.addFooterView(mFooterView);
+
 		
 	}
 
@@ -154,20 +156,15 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			
 			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
 			//		getLastBoardNo() );
-			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=0", temp);
+			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=-1"
+					, temp);
 		}
 		
 		@Override
 		protected void onPostExecute(Integer param) {
-			boardList.clear();
 			
-			for(int i=0; i<temp.size(); i++)
-				boardList.add(temp.get(i));
-			
-			adapter.notifyDataSetChanged();
+			postWorkInCommon(param, temp, true);
 			progress.dismiss();
-			
-			toastErrorMessage(param);
 			
 			super.onPostExecute(param);
 		}
@@ -186,33 +183,63 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			// TODO Auto-generated method stub
 			// return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last="+
 			//		getLastBoardNo() );
-			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=0", temp);
+			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=r&last=" +
+					getLastItemNo(), temp);
 			
 		}
 		
 		@Override
 		protected void onPostExecute(Integer param) {
-			boardList.clear();
-			
-			for(int i=0; i<temp.size(); i++)
-				boardList.add(temp.get(i));
-			
-			adapter.notifyDataSetChanged();
+			postWorkInCommon(param, temp, true);
 			ptrListView.onRefreshComplete();
-			
-			toastErrorMessage(param);
 			
 			super.onPostExecute(param);
 		}
 	
 	}
-	
+	private class LoadMoreTask extends AsyncTask<Void, Void, Integer> {
+		
+		ArrayList<Items.Board> temp;
+		
+		@Override
+		protected void onPreExecute() {
+			
+			temp = new ArrayList<Items.Board>();
+			mFooterView.setVisibility(View.VISIBLE);
+				
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected Integer doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return getBoardListFromServer("http://165.132.120.151/board_list.aspx?mode=lm&last=" +
+					getLastItemNo(), temp);
+		}
+		
+		@Override
+		protected void onPostExecute(Integer param) {
+
+			postWorkInCommon(param, temp, false);
+			onLoadingMoreComplete();
+			mFooterView.setVisibility(View.GONE);
+			
+			super.onPostExecute(param);
+		}
+	}	
 
 	// ============================================================
 	// Other Work
 	// ============================================================
 	private int getBoardListFromServer(String address, ArrayList<Items.Board> temp) {
 		
+		int total = 0;
 		URL url = null;
 		try {
 			
@@ -224,9 +251,8 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			Document document = builder.parse(new InputSource(url.openStream()));
 			Element element = document.getDocumentElement();
 			
-			
-			
-			
+			total = Integer.parseInt(element.getAttribute("total"));
+
 			for( Node aitem=element.getFirstChild(); aitem!=null; aitem=aitem.getNextSibling() ) {
 
 				Items.Board board = new Items.Board();
@@ -288,7 +314,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			
 		}
 		
-		return 0;
+		return total;
 	}
 	private void toastErrorMessage(int state) {
 		
@@ -314,8 +340,28 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 			ptrListView.setRefreshing();
 		}
 	}
-
-	
+	// Toast errmsg and calculate remained item num in database
+	private void postWorkInCommon(int param, ArrayList<Items.Board> temp, boolean listClear) {
+		if(listClear)
+			boardList.clear();
+		for(int i=0; i<temp.size(); i++)
+			boardList.add(temp.get(i));
+		
+		if(boardList.size() < param)
+			bIsThereItemToLoad = true;
+		else {
+			bIsThereItemToLoad = false;
+			listView.removeFooterView(mFooterView);
+		}
+		
+		adapter.notifyDataSetChanged();
+		toastErrorMessage(param);
+	}
+	private int getLastItemNo() {
+		if(boardList.size() > 0)
+			return boardList.get(boardList.size()-1).no;
+		else return 0;
+	}
 	
 
 	// ============================================================
@@ -325,6 +371,7 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
 		//bug fix: listview was not clickable after scroll
+		
 		if ( scrollState == OnScrollListener.SCROLL_STATE_IDLE )
     	{
       		view.invalidateViews();
@@ -334,32 +381,34 @@ public class BoardActivity extends ListActivity implements OnRefreshListener<Lis
 
 
 	}
-
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
-
+		
 		if (visibleItemCount == totalItemCount) {
-			mProgressBarLoadMore.setVisibility(View.GONE);
-			// mLabLoadMore.setVisibility(View.GONE);
+			// mProgressBarLoadMore.setVisibility(View.GONE);
 			return;
 		}
 
 		boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
 
 		if (!mIsLoadingMore && loadMore
-				&& mCurrentScrollState != SCROLL_STATE_IDLE) {
-			mProgressBarLoadMore.setVisibility(View.VISIBLE);
-			// mLabLoadMore.setVisibility(View.VISIBLE);
-			mIsLoadingMore = true;
+				&& mCurrentScrollState != SCROLL_STATE_IDLE && bIsThereItemToLoad) {
+			// mProgressBarLoadMore.setVisibility(View.VISIBLE);
+			Log.i(TAG, "LoadMore!");
 			onLoadMore();
 		}
 
 	}
 	
+	// Called when if there are items to load more end of listview
 	private void onLoadMore() {
-		
+		mIsLoadingMore = true;
+		new LoadMoreTask().execute();
+	}
+	private void onLoadingMoreComplete() {
+		mIsLoadingMore = false;
 	}
 
 }
