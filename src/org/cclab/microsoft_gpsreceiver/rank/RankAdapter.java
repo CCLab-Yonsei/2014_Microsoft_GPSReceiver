@@ -85,7 +85,7 @@ public class RankAdapter extends ArrayAdapter<RankItem> {
 		else
 			holder.tv_contributor.setText( item.contributor.substring(0, item.contributor.length()-1) + "***");
 		
-		holder.tv_measure.setText( item.gpsCount + "("+item.percentage+"%)" );
+		holder.tv_measure.setText( item.gpsCount + "(" + String.format("%2.2f", item.percentage) + "%)" );
 		
 		return convertView;
 	}
