@@ -59,9 +59,7 @@ public class CommentAdapter extends BaseAdapter {
 			tv_date = (TextView)convertView.findViewById(R.id.board_view_comment_textview_date);
 		}
 		
-		String id = Utility.getHashedStudentId(context).substring(0, 9);
-		
-		tv_writer.setText( items.get(position).writer.nickname + " (" + id + ")");
+		tv_writer.setText( items.get(position).writer.nickname + " (" + items.get(position).writer.hashedId.substring(0, 9) + ")");
 		tv_content.setText( items.get(position).content );
 		tv_date.setText( items.get(position).date );
 		
