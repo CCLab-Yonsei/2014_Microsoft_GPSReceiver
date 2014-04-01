@@ -38,7 +38,7 @@ public class Widget extends AppWidgetProvider {
 			
 			// 
 			Intent onclickIntent = new Intent(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, 0);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, PendingIntent.FLAG_NO_CREATE);
 			
 			RemoteViews widgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 			widgetLayoutView.setOnClickPendingIntent(R.id.widget_imgbtn, pendingIntent);
@@ -50,22 +50,20 @@ public class Widget extends AppWidgetProvider {
 			if(isServiceRunning) {
 				Log.i(TAG, "onUpdate, isServiceRunning == true");
 				
-				widgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+				widgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
 				widgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 			}
 			else {
 				
 				Log.i(TAG, "onUpdate, isServiceRunning == false");
 				
-				widgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+				widgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
 				widgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 			}
 			
-			
-			//
 			Log.i(TAG, "onUpdate, Last Line");
 			appWidgetManager.updateAppWidget(appWidgetId, widgetLayoutView);
-		}
+		} // For statement End
 	}
 	 
 	@Override
@@ -81,32 +79,33 @@ public class Widget extends AppWidgetProvider {
 		if(intent.getAction().equals(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK)) {
 			Log.i(TAG, "onReceive, Click Event Occur");
 			
-			// check whether GPS is enabled or not
-			final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				Log.i(TAG, "onReceive, GPS Provider disabled");
-				Toast.makeText(context, R.string.main_alert_enable_gps_question, Toast.LENGTH_SHORT).show();
-				
-				Intent settingsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(settingsIntent);
+			if(isServiceRunning) {
+				Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == true");
+				context.stopService(new Intent(context, GpsService.class));
+				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+				remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
 			}
 			else {
-				if(isServiceRunning) {
-					Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == true");
-					context.stopService(new Intent(context, GpsService.class));
-					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
-					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
-					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
+				Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == false");
+
+				// check whether GPS is enabled or not
+				final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+				if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+					Log.i(TAG, "onReceive, GPS Provider disabled");
+					Toast.makeText(context, R.string.main_alert_enable_gps_question, Toast.LENGTH_SHORT).show();
+					
+					Intent settingsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(settingsIntent);
 				}
-				else {
-					Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == false");
-					context.startService(new Intent(context, GpsService.class));
-					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
-					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
-					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
-				}
+				
+				context.startService(new Intent(context, GpsService.class));
+				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+				remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
+				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 			}
+		
 		}
 		// from start logging from MainActivity
 		else if(intent.getAction().equals(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON)) {
@@ -115,6 +114,7 @@ public class Widget extends AppWidgetProvider {
 			remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
 			remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
 		}
+		
 		// from finish logging from MainActivity
 		else if(intent.getAction().equals(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_OFF)) {
 			Log.i(TAG, "onReceive, LOGGING OFF");
