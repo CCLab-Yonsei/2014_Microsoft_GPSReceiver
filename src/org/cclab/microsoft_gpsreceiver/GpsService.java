@@ -169,6 +169,13 @@ public class GpsService extends Service {
 		else {
 			Toast.makeText(this,  getResources().getString(R.string.service_error), Toast.LENGTH_LONG).show();
 		}
+		
+		
+		// Record Log
+		// String logfile_path = directory + "/" + "log.txt";
+		// delay work
+		
+		
 	}
 	
 	@Override

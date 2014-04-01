@@ -98,6 +98,7 @@ public class MainActivity extends Activity {
 		
 		// check whether GPS is enabled or not
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		
 		if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && buttonStartstop.isChecked()) {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			final String question = getResources().getString(R.string.main_alert_enable_gps_question); 
@@ -117,22 +118,27 @@ public class MainActivity extends Activity {
 		    
 		    buttonStartstop.setChecked(false);
 		}
+		else if(buttonStartstop.isChecked()) {
+			tvGpsStatus.setText(R.string.main_textview_loggingstatus_on);
+			startService(new Intent(this, GpsService.class));
+			
+			Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON);
+			sendBroadcast(intent);
+		}
 		else {
-			if(buttonStartstop.isChecked()) {
-				tvGpsStatus.setText(R.string.main_textview_loggingstatus_on);
-				startService(new Intent(this, GpsService.class));
-				
-				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON);
-				sendBroadcast(intent);
-			}
-			else {
+			// check whether network is available
+			if(Utility.isNetworkAvailable(this)) {
 				tvGpsStatus.setText(R.string.main_textview_loggingstatus_off);
 				stopService(new Intent(this, GpsService.class));
 				
 				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_OFF);
 				sendBroadcast(intent);
-				
 			}
+			else { // If networks is available, ignore toggle button click event.
+				Toast.makeText(this, getResources().getString(R.string.main_toast_request_network), Toast.LENGTH_SHORT).show();
+				buttonStartstop.setChecked(true);
+			}
+			
 		}
 	}
 	

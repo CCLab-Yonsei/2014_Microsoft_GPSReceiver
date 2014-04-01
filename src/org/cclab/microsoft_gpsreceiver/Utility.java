@@ -7,6 +7,8 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class Utility {
 	
@@ -136,5 +138,19 @@ public class Utility {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Check whether netwokr is available
+	 * 
+	 * @author gnoowik
+	 * @param context
+	 * @return true/false
+	 */
+	public static boolean isNetworkAvailable(Context context) {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 }

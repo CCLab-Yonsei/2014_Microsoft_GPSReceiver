@@ -25,6 +25,8 @@ public class Widget extends AppWidgetProvider {
 	@Override
 	public void onEnabled(Context context) {
 		super.onEnabled(context);
+		
+		Log.i(TAG, "=====onEnabled=====");
 	}
 	
 	@Override
@@ -76,18 +78,24 @@ public class Widget extends AppWidgetProvider {
 		
 		// check if GPS logging service is running 
 		boolean isServiceRunning = Utility.isServiceRunning(context, GpsService.class.getName());
+		
 		if(intent.getAction().equals(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK)) {
 			Log.i(TAG, "onReceive, Click Event Occur");
 			
 			if(isServiceRunning) {
-				Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == true");
-				context.stopService(new Intent(context, GpsService.class));
-				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
-				remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
-				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
+				
+				if(Utility.isNetworkAvailable(context)) {
+					Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == true");
+					context.stopService(new Intent(context, GpsService.class));
+					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
+					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
+					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
+				}
+				else {	// If networks is available, ignore widget click event.
+					Toast.makeText(context, context.getResources().getString(R.string.main_toast_request_network), Toast.LENGTH_LONG).show();
+				}
 			}
 			else {
-				Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == false");
 
 				// check whether GPS is enabled or not
 				final LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -99,11 +107,12 @@ public class Widget extends AppWidgetProvider {
 					settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(settingsIntent);
 				}
-				
-				context.startService(new Intent(context, GpsService.class));
-				remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
-				remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
-				remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
+				else {
+					context.startService(new Intent(context, GpsService.class));
+					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
+					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
+					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
+				}
 			}
 		
 		}
@@ -131,11 +140,13 @@ public class Widget extends AppWidgetProvider {
 	 @Override
 	 public void onDeleted(Context context, int[] appWidgetIds) {
 		 super.onDeleted(context, appWidgetIds);
+		 Log.i(TAG, "=====onDeleted=====");
 	 }
 	 
 	 @Override
 	 public void onDisabled(Context context) {
 		 super.onDisabled(context);
+		 Log.i(TAG, "=====onDisabled=====");
 	 }
 	 
 }
