@@ -82,6 +82,9 @@ public class GpsService extends Service {
 		// success message
 		Toast.makeText(this,  getResources().getString(R.string.service_start), Toast.LENGTH_SHORT).show();
 		
+		// Logging to logfile
+		Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + getPackageName(),
+				"[Service] Service created");
 	}
 	
 	@Override
@@ -123,7 +126,7 @@ public class GpsService extends Service {
 				fw = new FileWriter(file);
 				bw = new BufferedWriter(fw);
 				
-				Log.i("GpsService", "DatasetSize: " + dataset.size());
+				// Log.i("GpsService", "DatasetSize: " + dataset.size());
 				Toast.makeText(getApplicationContext(), dataset.size() + getResources().getString(R.string.service_numberofpoints_message), Toast.LENGTH_SHORT).show();
 				for(int i = 0; i < dataset.size(); i++) {
 					bw.write(dataset.get(i).toString());
@@ -170,12 +173,9 @@ public class GpsService extends Service {
 			Toast.makeText(this,  getResources().getString(R.string.service_error), Toast.LENGTH_LONG).show();
 		}
 		
-		
-		// Record Log
-		// String logfile_path = directory + "/" + "log.txt";
-		// delay work
-		
-		
+		// Logging to logfile
+		Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + getPackageName(),
+				"[Service] Service destroyed");
 	}
 	
 	@Override

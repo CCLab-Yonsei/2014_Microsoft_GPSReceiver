@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -27,8 +28,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		Log.i("Main Activity", "Test Log");
 		
 		// initialize member variables
 		buttonStartstop = (ToggleButton)findViewById(R.id.mainactivity_togglebutton_startstop);
@@ -122,6 +121,10 @@ public class MainActivity extends Activity {
 			tvGpsStatus.setText(R.string.main_textview_loggingstatus_on);
 			startService(new Intent(this, GpsService.class));
 			
+			// Logging to logfile
+			Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + getPackageName(),
+					"[Service] Started by main activity");
+			
 			Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_ON);
 			sendBroadcast(intent);
 		}
@@ -130,6 +133,10 @@ public class MainActivity extends Activity {
 			if(Utility.isNetworkAvailable(this)) {
 				tvGpsStatus.setText(R.string.main_textview_loggingstatus_off);
 				stopService(new Intent(this, GpsService.class));
+
+				// Logging to logfile
+				Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + getPackageName(),
+						"[Service] Stopped by main activity");
 				
 				Intent intent = new Intent(Constants.INTENT_WIDGET_CURRENTSTATE_LOGGING_OFF);
 				sendBroadcast(intent);

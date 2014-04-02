@@ -1,7 +1,14 @@
 package org.cclab.microsoft_gpsreceiver;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -9,6 +16,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 public class Utility {
 	
@@ -152,5 +160,59 @@ public class Utility {
 	          = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+	
+	/**
+	 * Logging to log.txt
+	 * 
+	 * @author gnoowik
+	 * @param baseDirPath
+	 * @param message
+	 * 
+	 */
+	
+	public static void log(String baseDirPath, String message) {
+		Log.i("MS Log", message);
+		File baseDir = new File(baseDirPath);
+		
+		if(!baseDir.isDirectory()) {
+			baseDir.mkdirs();
+		}
+		
+		String logfile_path = baseDir + "/" + "log.txt";
+		File file = new File(logfile_path);
+		try {
+		if(!file.exists()) file.createNewFile();
+		} catch(Exception e) {
+			e.printStackTrace();
+			file = null;
+		}
+		finally {
+			baseDir = null;
+			if(file == null) return;
+		}
+		
+		
+		BufferedWriter bw = null;
+		try {
+			bw = new BufferedWriter(new FileWriter(file, true));
+			
+			Date date = new Date();
+			Format sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+			String ts = "[" + sdf.format(date) + "]";
+			bw.write(ts + message + "\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(bw != null) try {
+				bw.close();
+				bw = null;
+			} catch(Exception e) {}
+		}
+		
+
+		
 	}
 }

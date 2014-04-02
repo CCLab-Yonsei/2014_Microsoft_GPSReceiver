@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -27,6 +28,9 @@ public class Widget extends AppWidgetProvider {
 		super.onEnabled(context);
 		
 		Log.i(TAG, "=====onEnabled=====");
+		// Logging to logfile
+		Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+				"[Widget] onEnabled");
 	}
 	
 	@Override
@@ -34,6 +38,9 @@ public class Widget extends AppWidgetProvider {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		
 		Log.i(TAG, "onUpdate()");
+		// Logging to logfile
+		Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+				"[Widget] onUpdate");
 		
 		for(int i=0; i < appWidgetIds.length; i++) {
 			int appWidgetId = appWidgetIds[i];
@@ -72,6 +79,10 @@ public class Widget extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		
+		// Logging to logfile
+		Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+				"[Widget] onReceive Action(" + intent.getAction() + ")");
+		
 		Log.i(TAG, "onReceive()" + intent.getAction());
 		RemoteViews remoteWidgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		ComponentName watchWidget = new ComponentName(context, Widget.class);
@@ -87,6 +98,11 @@ public class Widget extends AppWidgetProvider {
 				if(Utility.isNetworkAvailable(context)) {
 					Log.i(TAG, "onReceive, GPS Provider enabled, isServiceRunning == true");
 					context.stopService(new Intent(context, GpsService.class));
+		
+					// Logging to logfile
+					Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+							"[Service] Stopped by widgets");
+					
 					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_off));
 					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.LTGRAY);
 					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_off_dark);
@@ -109,6 +125,11 @@ public class Widget extends AppWidgetProvider {
 				}
 				else {
 					context.startService(new Intent(context, GpsService.class));
+					
+					// Logging to logfile
+					Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+							"[Service] Started by widgets");
+					
 					remoteWidgetLayoutView.setTextViewText(R.id.widget_textview, context.getResources().getString(R.string.widget_on));
 					remoteWidgetLayoutView.setTextColor(R.id.widget_textview, Color.WHITE);
 					remoteWidgetLayoutView.setImageViewResource(R.id.widget_imgbtn, R.drawable.ic_action_location_found_dark);
@@ -141,12 +162,18 @@ public class Widget extends AppWidgetProvider {
 	 public void onDeleted(Context context, int[] appWidgetIds) {
 		 super.onDeleted(context, appWidgetIds);
 		 Log.i(TAG, "=====onDeleted=====");
+			// Logging to logfile
+			Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+					"[Widget] onDeleted");
 	 }
 	 
 	 @Override
 	 public void onDisabled(Context context) {
 		 super.onDisabled(context);
 		 Log.i(TAG, "=====onDisabled=====");
+			// Logging to logfile
+			Utility.log(Environment.getExternalStorageDirectory().getPath() + "/data/" + context.getPackageName(),
+					"[Widget] onDisabled");
 	 }
 	 
 }
