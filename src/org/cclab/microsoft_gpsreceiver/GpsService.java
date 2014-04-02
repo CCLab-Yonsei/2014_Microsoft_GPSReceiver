@@ -34,7 +34,7 @@ public class GpsService extends Service {
 	private double hdop;
 	private int nSatellite;
 
-	private ArrayList<GpsData> dataset;
+	
 	private GpsStatus.NmeaListener nmeaListener;
 	
 	private Vibrator vibrator;
@@ -97,6 +97,7 @@ public class GpsService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		
+		
 		boolean success = true;
 		
 		// create directory
@@ -106,6 +107,7 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
+		ArrayList<GpsData> dataset = null;
 		dataset = dbHelper.getGpsListNotSent();
 		
 		// test input
