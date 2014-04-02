@@ -47,7 +47,7 @@ public class Widget extends AppWidgetProvider {
 			
 			// 
 			Intent onclickIntent = new Intent(Constants.INTENT_WIDGET_ACTION_BUTTON_CLICK);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, PendingIntent.FLAG_NO_CREATE);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, onclickIntent, 0);
 			
 			RemoteViews widgetLayoutView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 			widgetLayoutView.setOnClickPendingIntent(R.id.widget_imgbtn, pendingIntent);

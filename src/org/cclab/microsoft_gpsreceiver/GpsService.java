@@ -41,6 +41,8 @@ public class GpsService extends Service {
 	private long[] vibPattern = {100, 500, 100, 500};
 	private boolean bGpsTurnOff = false;
 	
+	private GpsDBHelper dbHelper;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -65,7 +67,11 @@ public class GpsService extends Service {
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new MyLocationListener();
 		
-		dataset = new ArrayList<GpsData>();
+		// Open dbConnection
+		dbHelper = new GpsDBHelper(this);
+		dbHelper.open();
+		
+		// dataset = new ArrayList<GpsData>();
 		
 		
 		// request location updates 
@@ -100,9 +106,11 @@ public class GpsService extends Service {
 			directory.mkdirs();
 		}
 		
+		dataset = dbHelper.getGpsListNotSent();
+		
 		// test input
 		// dataset.add(new GpsData(1.0, 2.0, 3, 4, 5));
-		if(dataset.size() > 0) { 
+		if(dataset != null && dataset.size() > 0) { 
 			// save data to file
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(System.currentTimeMillis());
@@ -194,7 +202,9 @@ public class GpsService extends Service {
 		@Override
 		public void onLocationChanged(Location location) {
 			GpsData data = new GpsData(location.getLatitude(), location.getLongitude(), location.getTime(), nSatellite, hdop);
-			dataset.add(data);
+			// dataset.add(data);
+			dbHelper.insertGps(data);
+			
 		}
 
 		@Override

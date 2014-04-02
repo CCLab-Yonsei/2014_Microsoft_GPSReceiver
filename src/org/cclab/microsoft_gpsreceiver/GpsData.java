@@ -27,5 +27,11 @@ public class GpsData {
 		
 		return latitude + "\t" + longitude + "\t" + sdf.format(date) + "\t" + nSatellite + "\t" + hdop + "\n";
 	}
+	
+	public double getLat() { return latitude; }
+	public double getLng() { return longitude; }
+	public long getTimestamp() { return timestamp; }
+	public int getNStatellite() { return nSatellite; }
+	public double getHdop() { return hdop; }
 
 }
