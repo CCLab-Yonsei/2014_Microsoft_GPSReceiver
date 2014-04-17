@@ -4,18 +4,17 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
+import android.util.Log;
 
 public class GpsDBHelper {
 
 
 	private static final String DATABASE_NAME = "msgps.db";
 	private static final String TABLE_NAME = "msgps";
-    private static final int DATABASE_VERSION = 1 ;
+	private static final int DATABASE_VERSION = 2;
     
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_LATITUDE = "lat";
@@ -64,7 +63,7 @@ public class GpsDBHelper {
     	
     	while(cursor.moveToNext()) {
     		GpsData data = new GpsData(
-    				cursor.getLong(1), cursor.getLong(2), cursor.getLong(3), cursor.getInt(4), cursor.getDouble(5)
+    				cursor.getDouble(1), cursor.getDouble(2), cursor.getLong(3), cursor.getInt(4), cursor.getDouble(5)
     				);
     		GpsListToReturn.add(data);
     	}
@@ -111,8 +110,14 @@ public class GpsDBHelper {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-			 db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
-	         onCreate(db);
+			Log.i("GpsDBHelper", "onUpgrade");
+			
+			if(oldVersion == 1 && newVersion == 2) {
+				
+				String _UPDATE = "UPDATE " + TABLE_NAME + " SET " + COLUMN_SENT + "=0";
+				db.execSQL(_UPDATE);
+				
+			}
 		}
     	
     }
